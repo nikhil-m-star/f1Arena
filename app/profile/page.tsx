@@ -66,10 +66,10 @@ export default async function ProfilePage() {
     <div className="mx-auto w-full max-w-4xl px-6 py-12 flex-1 flex flex-col space-y-8">
       {/* Profile summary card */}
       <div className="glass-card rounded-xl p-6 relative overflow-hidden">
-        <div className="absolute top-0 right-0 h-1 bg-f1-red w-full"></div>
+        <div className="absolute top-0 right-0 h-1 bg-f1-cyan w-full"></div>
 
         <div className="flex flex-col sm:flex-row items-center gap-6">
-          <div className="h-16 w-16 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center text-white text-xl font-black italic shadow-[0_0_15px_rgba(225,6,0,0.15)]">
+          <div className="h-16 w-16 rounded-full bg-zinc-900 flex items-center justify-center text-white text-xl font-black italic">
             {user.name.slice(0, 2).toUpperCase()}
           </div>
 
@@ -91,19 +91,19 @@ export default async function ProfilePage() {
 
       {/* Telemetry Stats Grid */}
       <div className="grid gap-4 grid-cols-2 md:grid-cols-4">
-        <div className="glass-card p-5 rounded-xl border border-zinc-800 text-center">
+        <div className="glass-card p-5 rounded-xl text-center">
           <span className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider block">Total Points</span>
-          <span className="text-3xl font-black text-f1-red mt-2 block">{totalPoints}</span>
+          <span className="text-3xl font-black text-f1-cyan mt-2 block">{totalPoints}</span>
         </div>
-        <div className="glass-card p-5 rounded-xl border border-zinc-800 text-center">
+        <div className="glass-card p-5 rounded-xl text-center">
           <span className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider block">Average / Race</span>
           <span className="text-3xl font-black text-white mt-2 block">{averagePoints}</span>
         </div>
-        <div className="glass-card p-5 rounded-xl border border-zinc-800 text-center">
+        <div className="glass-card p-5 rounded-xl text-center">
           <span className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider block">Predictions Locked</span>
           <span className="text-3xl font-black text-white mt-2 block">{predictionCount}</span>
         </div>
-        <div className="glass-card p-5 rounded-xl border border-zinc-800 text-center">
+        <div className="glass-card p-5 rounded-xl text-center">
           <span className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider block">Joker Card Used</span>
           <span className="text-xs font-black text-white mt-2.5 block truncate max-w-full px-1 uppercase italic">
             {jokerPrediction ? jokerPrediction.race.name : "Available"}
@@ -115,7 +115,7 @@ export default async function ProfilePage() {
       <div className="space-y-4">
         <div>
           <h2 className="text-xl font-bold uppercase italic text-white flex items-center gap-2">
-            📊 AI Season Telemetry Analysis & Roast
+            AI Season Telemetry Analysis & Roast
           </h2>
           <p className="text-xs text-zinc-400 mt-1">
             Get personalized insights or a friendly roast of your prediction performance history using NVIDIA NIM Llama 3.3.

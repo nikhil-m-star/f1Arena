@@ -2,24 +2,23 @@
 
 :root {
   --background: #09090b; /* Zinc 950 */
-  --foreground: #fafafa; /* Zinc 50 */
-  --card-bg: rgba(24, 24, 27, 0.7); /* Zinc 900 with opacity */
-  --card-border: rgba(63, 63, 70, 0.4); /* Zinc 700 with opacity */
-  --accent-red: #e10600; /* Official F1 Red */
-  --accent-glow: rgba(225, 6, 0, 0.4);
+  --foreground: #f4f4f5; /* Zinc 100 */
+  --card-bg: #18181b; /* Zinc 900 */
+  --card-bg-hover: #27272a; /* Zinc 800 */
+  --accent-cyan: #06b6d4; /* Cyan 500 */
+  --accent-cyan-hover: #0891b2; /* Cyan 600 */
   --neon-green: #22c55e;
-  --neon-cyan: #06b6d4;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card-bg: var(--card-bg);
-  --color-card-border: var(--card-border);
-  --color-f1-red: var(--accent-red);
+  --color-card-bg-hover: var(--card-bg-hover);
+  --color-f1-cyan: var(--accent-cyan);
+  --color-f1-cyan-hover: var(--accent-cyan-hover);
   --color-neon-green: var(--neon-green);
-  --color-neon-cyan: var(--neon-cyan);
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui;
+  --font-sans: var(--font-outfit), ui-sans-serif, system-ui;
   --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular;
 }
 
@@ -31,36 +30,30 @@ body {
   overflow-x: hidden;
 }
 
-/* Glassmorphic card styling */
+/* Minimalist borderless card styling */
 .glass-card {
   background: var(--card-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--card-border);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease-in-out;
 }
 
 .glass-card:hover {
-  border-color: rgba(225, 6, 0, 0.3);
-  box-shadow: 0 8px 32px 0 rgba(225, 6, 0, 0.05);
+  background: var(--card-bg-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px 0 rgba(0, 0, 0, 0.3);
 }
 
-/* F1 Red Neon Button styling */
+/* Cyan Button styling */
 .btn-f1 {
-  background: var(--accent-red);
-  color: white;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  background: var(--accent-cyan);
+  color: #09090b;
+  font-weight: 600;
   transition: all 0.2s ease-in-out;
-  box-shadow: 0 4px 14px 0 rgba(225, 6, 0, 0.3);
 }
 
 .btn-f1:hover {
-  background: #ff1e18;
+  background: var(--accent-cyan-hover);
   transform: translateY(-1px);
-  box-shadow: 0 6px 20px 0 rgba(225, 6, 0, 0.5);
 }
 
 .btn-f1:active {
@@ -68,22 +61,12 @@ body {
 }
 
 /* Subtle glow indicators */
-.indicator-glow-red {
-  box-shadow: 0 0 8px var(--accent-red);
+.indicator-glow-cyan {
+  box-shadow: 0 0 10px var(--accent-cyan);
 }
 
 .indicator-glow-green {
-  box-shadow: 0 0 8px var(--neon-green);
+  box-shadow: 0 0 10px var(--neon-green);
 }
 
-/* Carbon mesh background effect */
-.carbon-bg {
-  background-image: 
-    linear-gradient(45deg, #111 25%, transparent 25%), 
-    linear-gradient(-45deg, #111 25%, transparent 25%), 
-    linear-gradient(45deg, transparent 75%, #111 75%), 
-    linear-gradient(-45deg, transparent 75%, #111 75%);
-  background-size: 8px 8px;
-  background-position: 0 0, 0 4px, 4px -4px, -4px 0px;
-}
 

@@ -68,8 +68,8 @@ export default async function ArenasPage() {
       {/* Left 2 Columns: Leagues list */}
       <div className="md:col-span-2 space-y-6">
         <div>
-          <h1 className="text-3xl font-black italic uppercase text-white flex items-center gap-2">
-            🏟️ Your Arenas
+          <h1 className="text-3xl font-black italic uppercase text-white">
+            Your Arenas
           </h1>
           <p className="text-sm text-zinc-400 mt-1">
             Private groups where you compete only with friends.
@@ -81,15 +81,15 @@ export default async function ArenasPage() {
             {memberships.map(({ league }) => (
               <div
                 key={league.id}
-                className="glass-card rounded-xl p-5 border border-zinc-800 flex flex-col justify-between"
+                className="glass-card rounded-xl p-5 flex flex-col justify-between"
               >
                 <div>
                   <div className="flex items-center justify-between gap-2 mb-2">
                     <span className="text-[10px] font-extrabold text-zinc-500 uppercase tracking-wider">
-                      Arena Code: <strong className="text-f1-red">{league.inviteCode}</strong>
+                      Arena Code: <strong className="text-f1-cyan">{league.inviteCode}</strong>
                     </span>
                     {league.ownerId === user.id && (
-                      <span className="inline-flex items-center gap-1 rounded bg-red-950/40 px-2 py-0.5 text-[9px] font-bold text-f1-red border border-red-500/10">
+                      <span className="inline-flex items-center gap-1 rounded bg-cyan-950/40 px-2 py-0.5 text-[9px] font-bold text-f1-cyan">
                         <Shield className="w-2.5 h-2.5" /> OWNER
                       </span>
                     )}
@@ -102,7 +102,7 @@ export default async function ArenasPage() {
                   </p>
                 </div>
 
-                <div className="mt-6 pt-4 border-t border-zinc-800/40 flex items-center justify-between">
+                <div className="mt-6 pt-4 flex items-center justify-between">
                   <span className="text-xs text-zinc-400 font-medium">
                     {league.memberships.length} {league.memberships.length === 1 ? "member" : "members"}
                   </span>
@@ -117,8 +117,8 @@ export default async function ArenasPage() {
             ))}
           </div>
         ) : (
-          <div className="glass-card rounded-xl p-10 text-center border border-zinc-800">
-            <Users className="w-12 h-12 text-zinc-600 mx-auto mb-3" />
+          <div className="glass-card rounded-xl p-10 text-center">
+            <Users className="w-12 h-12 text-zinc-650 mx-auto mb-3" />
             <h3 className="text-base font-bold text-white">No Arenas Yet</h3>
             <p className="text-xs text-zinc-500 mt-1 max-w-sm mx-auto">
               You haven't created or joined any private Arenas. Use the panel on the right to start challenging friends.
@@ -130,9 +130,9 @@ export default async function ArenasPage() {
       {/* Right Column: Create / Join actions */}
       <div className="space-y-6">
         {/* Create Arena card */}
-        <div className="glass-card rounded-xl p-6 border border-zinc-800">
+        <div className="glass-card rounded-xl p-6">
           <h2 className="text-base font-bold uppercase italic text-white mb-4 flex items-center gap-1.5">
-            <Plus className="w-4 h-4 text-f1-red" /> Create New Arena
+            <Plus className="w-4 h-4 text-f1-cyan" /> Create New Arena
           </h2>
           <form action={handleCreate} className="space-y-4">
             <div className="flex flex-col gap-1.5">
@@ -144,7 +144,7 @@ export default async function ArenasPage() {
                 name="name"
                 required
                 placeholder="e.g. Scuderia Friends"
-                className="bg-zinc-900 border border-zinc-800 rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-f1-red transition placeholder-zinc-600"
+                className="bg-zinc-900 rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-f1-cyan transition placeholder-zinc-600"
               />
             </div>
             <button
@@ -157,9 +157,9 @@ export default async function ArenasPage() {
         </div>
 
         {/* Join Arena card */}
-        <div className="glass-card rounded-xl p-6 border border-zinc-800">
+        <div className="glass-card rounded-xl p-6">
           <h2 className="text-base font-bold uppercase italic text-white mb-4 flex items-center gap-1.5">
-            <LogIn className="w-4 h-4 text-neon-cyan" /> Join Friend's Arena
+            <LogIn className="w-4 h-4 text-f1-cyan" /> Join Friend's Arena
           </h2>
           <form action={handleJoin} className="space-y-4">
             <div className="flex flex-col gap-1.5">
@@ -171,12 +171,12 @@ export default async function ArenasPage() {
                 name="inviteCode"
                 required
                 placeholder="e.g. X9Y2Z8"
-                className="bg-zinc-900 border border-zinc-800 rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-f1-red transition placeholder-zinc-600 uppercase"
+                className="bg-zinc-900 rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-f1-cyan transition placeholder-zinc-600 uppercase"
               />
             </div>
             <button
               type="submit"
-              className="w-full bg-zinc-800 border border-zinc-700 hover:bg-zinc-700 transition text-zinc-200 py-2 text-xs rounded font-bold cursor-pointer"
+              className="w-full bg-zinc-800 hover:bg-zinc-700 transition text-zinc-205 py-2 text-xs rounded font-bold cursor-pointer"
             >
               Enter Arena
             </button>

@@ -1,10 +1,10 @@
-import {ClerkProvider, Show, SignInButton, SignUpButton, UserButton} from "@clerk/nextjs";
+import { ClerkProvider, Show, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Outfit, Geist_Mono } from "next/font/google";
 import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+ 
+const outfit = Outfit({
+  variable: "--font-outfit",
   subsets: ["latin"],
 });
 
@@ -28,14 +28,14 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased dark`}
+      className={`${outfit.variable} ${geistMono.variable} h-full antialiased dark`}
     >
       <body className="min-h-full flex flex-col bg-zinc-950 text-zinc-50">
         <ClerkProvider>
-          <header className="sticky top-0 z-50 flex h-16 items-center justify-between border-b border-zinc-800/80 bg-zinc-950/80 px-6 backdrop-blur-md">
+          <header className="sticky top-0 z-50 flex h-16 items-center justify-between bg-zinc-950/80 px-6 backdrop-blur-md">
             <div className="flex items-center gap-8">
               <Link href="/" className="flex items-center font-black tracking-wider text-xl text-white">
-                <span className="bg-f1-red px-2 py-0.5 rounded italic text-zinc-950 font-extrabold mr-1 shadow-sm">F1</span>
+                <span className="bg-f1-cyan px-2 py-0.5 rounded italic text-zinc-950 font-extrabold mr-1">F1</span>
                 <span className="font-extrabold">ARENA</span>
               </Link>
               <nav className="hidden md:flex items-center gap-6 text-sm font-semibold text-zinc-400">
@@ -49,12 +49,12 @@ export default function RootLayout({
             <div className="flex items-center gap-4">
               <Show when="signed-out">
                 <SignInButton mode="modal">
-                  <button className="px-4 py-1.5 rounded bg-zinc-800 hover:bg-zinc-700 text-sm font-bold transition text-zinc-200 cursor-pointer">
+                  <button className="px-4 py-1.5 rounded bg-zinc-900 hover:bg-zinc-800 text-sm font-semibold transition text-zinc-200 cursor-pointer">
                     Sign In
                   </button>
                 </SignInButton>
                 <SignUpButton mode="modal">
-                  <button className="px-4 py-1.5 rounded bg-f1-red hover:bg-red-500 text-sm font-bold transition text-white shadow-[0_0_10px_rgba(225,6,0,0.3)] cursor-pointer">
+                  <button className="px-4 py-1.5 rounded bg-f1-cyan hover:bg-f1-cyan-hover text-sm font-semibold transition text-zinc-950 cursor-pointer">
                     Sign Up
                   </button>
                 </SignUpButton>
@@ -69,7 +69,7 @@ export default function RootLayout({
             {children}
           </main>
           
-          <footer className="border-t border-zinc-800/80 bg-zinc-950 py-6 text-center text-sm text-zinc-500">
+          <footer className="bg-zinc-950 py-6 text-center text-sm text-zinc-500">
             <p>&copy; {new Date().getFullYear()} F1 Arena. Not affiliated with Formula 1 or the FIA.</p>
           </footer>
         </ClerkProvider>

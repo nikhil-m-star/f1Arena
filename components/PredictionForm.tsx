@@ -137,10 +137,10 @@ export default function PredictionForm({
     <form onSubmit={handleSubmit} className="space-y-6">
       {status && (
         <div
-          className={`flex items-start gap-2.5 p-4 rounded border text-sm font-medium ${
+          className={`flex items-start gap-2.5 p-4 rounded text-sm font-medium ${
             status.type === "success"
-              ? "bg-emerald-950/40 text-emerald-400 border-emerald-500/20"
-              : "bg-red-950/40 text-red-400 border-red-500/20"
+              ? "bg-emerald-950/40 text-emerald-400"
+              : "bg-red-950/40 text-red-400"
           }`}
         >
           <AlertCircle className="w-4 h-4 mt-0.5 flex-shrink-0" />
@@ -159,7 +159,7 @@ export default function PredictionForm({
             value={p1}
             onChange={(e) => setP1(e.target.value)}
             required
-            className="bg-zinc-900 border border-zinc-800 rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-f1-red transition"
+            className="bg-zinc-900 rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-f1-cyan transition"
           >
             <option value="">Select Driver...</option>
             {DRIVERS.map((d) => (
@@ -180,7 +180,7 @@ export default function PredictionForm({
             value={p2}
             onChange={(e) => setP2(e.target.value)}
             required
-            className="bg-zinc-900 border border-zinc-800 rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-f1-red transition"
+            className="bg-zinc-900 rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-f1-cyan transition"
           >
             <option value="">Select Driver...</option>
             {DRIVERS.map((d) => (
@@ -201,7 +201,7 @@ export default function PredictionForm({
             value={p3}
             onChange={(e) => setP3(e.target.value)}
             required
-            className="bg-zinc-900 border border-zinc-800 rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-f1-red transition"
+            className="bg-zinc-900 rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-f1-cyan transition"
           >
             <option value="">Select Driver...</option>
             {DRIVERS.map((d) => (
@@ -223,7 +223,7 @@ export default function PredictionForm({
             value={fastestLap}
             onChange={(e) => setFastestLap(e.target.value)}
             required
-            className="bg-zinc-900 border border-zinc-800 rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-f1-red transition"
+            className="bg-zinc-900 rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-f1-cyan transition"
           >
             <option value="">Select Driver...</option>
             {DRIVERS.map((d) => (
@@ -242,7 +242,7 @@ export default function PredictionForm({
           <select
             value={dnf}
             onChange={(e) => setDnf(e.target.value)}
-            className="bg-zinc-900 border border-zinc-800 rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-f1-red transition"
+            className="bg-zinc-900 rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-f1-cyan transition"
           >
             <option value="">No DNF Pick</option>
             {DRIVERS.map((d) => (
@@ -255,10 +255,10 @@ export default function PredictionForm({
       </div>
 
       {/* Joker selection card */}
-      <div className="glass-card p-4 rounded-xl border border-zinc-800 flex items-center justify-between gap-4">
+      <div className="glass-card p-4 rounded-xl flex items-center justify-between gap-4">
         <div className="space-y-1">
           <label className="font-extrabold text-white text-sm uppercase italic flex items-center gap-1.5">
-            🃏 Play Joker Card
+            Play Joker Card
           </label>
           <p className="text-xs text-zinc-500 max-w-md font-medium">
             Doubles your points for this race. You can only use ONE Joker card per season. Use it wisely!
@@ -266,7 +266,7 @@ export default function PredictionForm({
         </div>
         <div>
           {jokerUsedOnOtherRace && !initialPrediction?.isJoker ? (
-            <span className="text-xs text-zinc-600 bg-zinc-900 border border-zinc-800 font-bold px-3 py-1.5 rounded cursor-not-allowed inline-block">
+            <span className="text-xs text-zinc-650 bg-zinc-900 font-bold px-3 py-1.5 rounded cursor-not-allowed inline-block">
               Joker Already Used
             </span>
           ) : (
@@ -274,7 +274,7 @@ export default function PredictionForm({
               type="checkbox"
               checked={isJoker}
               onChange={(e) => setIsJoker(e.target.checked)}
-              className="w-5 h-5 rounded accent-f1-red cursor-pointer"
+              className="w-5 h-5 rounded accent-f1-cyan cursor-pointer"
             />
           )}
         </div>
@@ -287,7 +287,7 @@ export default function PredictionForm({
             type="button"
             onClick={fetchCommentary}
             disabled={loadingCommentary || duplicatePodium}
-            className="flex items-center gap-2 text-xs font-extrabold text-neon-cyan hover:underline disabled:opacity-50 disabled:no-underline cursor-pointer"
+            className="flex items-center gap-2 text-xs font-extrabold text-f1-cyan hover:underline disabled:opacity-50 disabled:no-underline cursor-pointer"
           >
             <Sparkles className="w-3.5 h-3.5" />
             {loadingCommentary ? "AI Coach is analyzing..." : "Ask F1 AI Coach for Commentary"}
@@ -295,14 +295,14 @@ export default function PredictionForm({
         </div>
 
         {commentary && (
-          <div className="p-4 rounded bg-cyan-950/20 text-cyan-400 border border-cyan-500/20 text-sm italic font-medium leading-relaxed shadow-sm relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-1 bg-neon-cyan h-full"></div>
+          <div className="p-4 rounded bg-cyan-950/20 text-f1-cyan text-sm italic font-medium leading-relaxed shadow-sm relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-1 bg-f1-cyan h-full"></div>
             "{commentary}"
           </div>
         )}
       </div>
 
-      <div className="pt-4 border-t border-zinc-800/40">
+      <div className="pt-4">
         <button
           type="submit"
           disabled={submitting || duplicatePodium}

@@ -132,11 +132,11 @@ export default async function RaceDetailPage({ params }: RaceDetailPageProps) {
                 Round {race.round}
               </span>
               {isLocked ? (
-                <span className="inline-flex items-center gap-1 rounded bg-zinc-950/60 px-2 py-0.5 text-[10px] font-bold text-zinc-400 border border-zinc-700/30">
+                <span className="inline-flex items-center gap-1 rounded bg-zinc-950/60 px-2 py-0.5 text-[10px] font-bold text-zinc-400">
                   <Lock className="w-2.5 h-2.5 text-zinc-500" /> LOCKED
                 </span>
               ) : (
-                <span className="inline-flex items-center gap-1 rounded bg-emerald-950/40 px-2 py-0.5 text-[10px] font-bold text-emerald-500 border border-emerald-500/20">
+                <span className="inline-flex items-center gap-1 rounded bg-emerald-950/40 px-2 py-0.5 text-[10px] font-bold text-emerald-500">
                   <Unlock className="w-2.5 h-2.5 text-emerald-500" /> OPEN
                 </span>
               )}
@@ -153,9 +153,9 @@ export default async function RaceDetailPage({ params }: RaceDetailPageProps) {
           </div>
 
           {!isLocked && (
-            <div className="flex flex-col items-start md:items-end gap-1.5 bg-zinc-900/40 p-4 rounded border border-zinc-800/40 min-w-[200px]">
+            <div className="flex flex-col items-start md:items-end gap-1.5 bg-zinc-900/40 p-4 rounded min-w-[200px]">
               <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider flex items-center gap-1">
-                <Clock className="w-3 h-3 text-f1-red" /> Submissions Close In
+                <Clock className="w-3 h-3 text-f1-cyan" /> Submissions Close In
               </span>
               <RaceCountdown qualiDateTime={race.qualiDateTime.toISOString()} />
             </div>
@@ -169,8 +169,8 @@ export default async function RaceDetailPage({ params }: RaceDetailPageProps) {
           {/* Prediction Form Section */}
           {!isLocked ? (
             <div className="glass-card rounded-xl p-6">
-              <h2 className="text-xl font-bold uppercase italic text-white mb-6 border-b border-zinc-800 pb-3 flex items-center gap-2">
-                ✍️ Your Race Predictions
+              <h2 className="text-xl font-bold uppercase italic text-white mb-6 pb-3 flex items-center gap-2">
+                Your Race Predictions
               </h2>
               {dbUser ? (
                 <PredictionForm
@@ -190,27 +190,27 @@ export default async function RaceDetailPage({ params }: RaceDetailPageProps) {
             <div className="space-y-8">
               {/* User prediction recap vs Actual Results */}
               <div className="glass-card rounded-xl p-6">
-                <h2 className="text-xl font-bold uppercase italic text-white mb-6 border-b border-zinc-800 pb-3 flex items-center gap-2">
-                  🏁 Race Results & Predictions
+                <h2 className="text-xl font-bold uppercase italic text-white mb-6 pb-3 flex items-center gap-2">
+                  Race Results & Predictions
                 </h2>
 
                 {race.result ? (
                   <div className="space-y-6">
                     {/* Race podium view */}
                     <div className="grid grid-cols-3 gap-4 text-center">
-                      <div className="bg-zinc-900/50 p-4 rounded border border-zinc-800">
+                      <div className="bg-zinc-900/50 p-4 rounded">
                         <div className="text-[10px] text-zinc-500 font-bold uppercase">1st Place</div>
                         <div className="text-lg font-black text-amber-500 uppercase mt-1">
                           {getDriverName(race.result.actualP1)}
                         </div>
                       </div>
-                      <div className="bg-zinc-900/50 p-4 rounded border border-zinc-800">
+                      <div className="bg-zinc-900/50 p-4 rounded">
                         <div className="text-[10px] text-zinc-500 font-bold uppercase">2nd Place</div>
                         <div className="text-lg font-black text-zinc-300 uppercase mt-1">
                           {getDriverName(race.result.actualP2)}
                         </div>
                       </div>
-                      <div className="bg-zinc-900/50 p-4 rounded border border-zinc-800">
+                      <div className="bg-zinc-900/50 p-4 rounded">
                         <div className="text-[10px] text-zinc-500 font-bold uppercase">3rd Place</div>
                         <div className="text-lg font-black text-amber-700 uppercase mt-1">
                           {getDriverName(race.result.actualP3)}
@@ -219,11 +219,11 @@ export default async function RaceDetailPage({ params }: RaceDetailPageProps) {
                     </div>
 
                     <div className="grid gap-4 sm:grid-cols-2 text-sm">
-                      <div className="bg-zinc-900/40 p-3.5 rounded border border-zinc-850">
+                      <div className="bg-zinc-900/40 p-3.5 rounded">
                         <span className="text-zinc-500 font-bold">Fastest Lap:</span>{" "}
                         <strong className="text-white uppercase">{getDriverName(race.result.actualFastestLap)}</strong>
                       </div>
-                      <div className="bg-zinc-900/40 p-3.5 rounded border border-zinc-850">
+                      <div className="bg-zinc-900/40 p-3.5 rounded">
                         <span className="text-zinc-500 font-bold">DNFs:</span>{" "}
                         <strong className="text-white uppercase">
                           {race.result.actualDNFs.map(getDriverName).join(", ") || "None"}
@@ -232,7 +232,7 @@ export default async function RaceDetailPage({ params }: RaceDetailPageProps) {
                     </div>
                   </div>
                 ) : (
-                  <div className="p-6 bg-zinc-900/40 rounded border border-zinc-800 text-center">
+                  <div className="p-6 bg-zinc-900/40 rounded text-center">
                     <p className="text-sm text-zinc-500 font-medium">
                       Race has locked. Waiting for results to be fetched and points calculated.
                     </p>
@@ -241,34 +241,34 @@ export default async function RaceDetailPage({ params }: RaceDetailPageProps) {
 
                 {/* Show user prediction vs results side-by-side */}
                 {userPrediction && (
-                  <div className="mt-8 border-t border-zinc-800 pt-6">
+                  <div className="mt-8 pt-6">
                     <h3 className="text-sm font-extrabold uppercase italic text-zinc-400 mb-4">
                       Your Predictions
                     </h3>
                     <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                      <div className="bg-zinc-900/20 p-3 rounded border border-zinc-800/80 flex items-center justify-between">
+                      <div className="bg-zinc-900/20 p-3 rounded flex items-center justify-between">
                         <span className="text-xs text-zinc-500">P1 Pick:</span>
                         <span className="text-xs font-bold text-white uppercase">{getDriverName(userPrediction.predictedP1)}</span>
                       </div>
-                      <div className="bg-zinc-900/20 p-3 rounded border border-zinc-800/80 flex items-center justify-between">
+                      <div className="bg-zinc-900/20 p-3 rounded flex items-center justify-between">
                         <span className="text-xs text-zinc-500">P2 Pick:</span>
                         <span className="text-xs font-bold text-white uppercase">{getDriverName(userPrediction.predictedP2)}</span>
                       </div>
-                      <div className="bg-zinc-900/20 p-3 rounded border border-zinc-800/80 flex items-center justify-between">
+                      <div className="bg-zinc-900/20 p-3 rounded flex items-center justify-between">
                         <span className="text-xs text-zinc-500">P3 Pick:</span>
                         <span className="text-xs font-bold text-white uppercase">{getDriverName(userPrediction.predictedP3)}</span>
                       </div>
-                      <div className="bg-zinc-900/20 p-3 rounded border border-zinc-800/80 flex items-center justify-between">
+                      <div className="bg-zinc-900/20 p-3 rounded flex items-center justify-between">
                         <span className="text-xs text-zinc-500">Fastest Lap:</span>
                         <span className="text-xs font-bold text-white uppercase">{getDriverName(userPrediction.predictedFastestLap)}</span>
                       </div>
-                      <div className="bg-zinc-900/20 p-3 rounded border border-zinc-800/80 flex items-center justify-between">
+                      <div className="bg-zinc-900/20 p-3 rounded flex items-center justify-between">
                         <span className="text-xs text-zinc-500">DNF Pick:</span>
                         <span className="text-xs font-bold text-white uppercase">{userPrediction.predictedDNF ? getDriverName(userPrediction.predictedDNF) : "None"}</span>
                       </div>
-                      <div className="bg-zinc-900/20 p-3 rounded border border-zinc-800/80 flex items-center justify-between">
+                      <div className="bg-zinc-900/20 p-3 rounded flex items-center justify-between">
                         <span className="text-xs text-zinc-500">Joker Played:</span>
-                        <span className="text-xs font-black text-f1-red uppercase">{userPrediction.isJoker ? "YES (2x)" : "NO"}</span>
+                        <span className="text-xs font-black text-f1-cyan uppercase">{userPrediction.isJoker ? "YES (2x)" : "NO"}</span>
                       </div>
                     </div>
                   </div>
@@ -279,9 +279,9 @@ export default async function RaceDetailPage({ params }: RaceDetailPageProps) {
               {userScore && (userScore.aiRecap || userScore.aiRoast) && (
                 <div className="grid gap-6 sm:grid-cols-2">
                   {userScore.aiRecap && (
-                    <div className="glass-card p-5 rounded-xl border border-zinc-800 flex flex-col justify-between">
+                    <div className="glass-card p-5 rounded-xl flex flex-col justify-between">
                       <div>
-                        <span className="inline-flex items-center gap-1 text-[10px] font-extrabold text-neon-green uppercase bg-emerald-950/40 px-2 py-0.5 rounded border border-emerald-500/10 mb-3">
+                        <span className="inline-flex items-center gap-1 text-[10px] font-extrabold text-neon-green uppercase bg-emerald-950/40 px-2 py-0.5 rounded mb-3">
                           <Award className="w-3 h-3" /> F1 Analyst Recap
                         </span>
                         <p className="text-sm italic leading-relaxed text-zinc-300 font-medium">"{userScore.aiRecap}"</p>
@@ -290,9 +290,9 @@ export default async function RaceDetailPage({ params }: RaceDetailPageProps) {
                   )}
 
                   {userScore.aiRoast && (
-                    <div className="glass-card p-5 rounded-xl border border-zinc-800 flex flex-col justify-between">
+                    <div className="glass-card p-5 rounded-xl flex flex-col justify-between">
                       <div>
-                        <span className="inline-flex items-center gap-1 text-[10px] font-extrabold text-f1-red uppercase bg-red-950/40 px-2 py-0.5 rounded border border-red-500/10 mb-3">
+                        <span className="inline-flex items-center gap-1 text-[10px] font-extrabold text-f1-cyan uppercase bg-cyan-950/40 px-2 py-0.5 rounded mb-3">
                           <Flame className="w-3 h-3" /> Post-Race Roast
                         </span>
                         <p className="text-sm italic leading-relaxed text-zinc-300 font-medium">"{userScore.aiRoast}"</p>
@@ -310,15 +310,15 @@ export default async function RaceDetailPage({ params }: RaceDetailPageProps) {
           {/* User Score Details */}
           {userScore && (
             <div className="glass-card rounded-xl p-6 relative overflow-hidden">
-              <div className="absolute top-0 right-0 h-1 bg-f1-red w-full"></div>
+              <div className="absolute top-0 right-0 h-1 bg-f1-cyan w-full"></div>
               <h3 className="text-xs font-bold uppercase tracking-widest text-zinc-400 mb-4">Your Score Breakdown</h3>
 
-              <div className="text-center py-6 bg-zinc-900/60 rounded border border-zinc-850 mb-6">
+              <div className="text-center py-6 bg-zinc-900/60 rounded mb-6">
                 <div className="text-sm font-bold text-zinc-500 uppercase">Race Points</div>
-                <div className="text-5xl font-black text-f1-red mt-2">{userScore.points}</div>
+                <div className="text-5xl font-black text-f1-cyan mt-2">{userScore.points}</div>
                 {userPrediction?.isJoker && (
-                  <div className="inline-block mt-3 text-[10px] font-extrabold text-amber-500 uppercase bg-amber-950/30 px-2 py-0.5 rounded border border-amber-500/20">
-                    🃏 JOKER APPLIED (2x)
+                  <div className="inline-block mt-3 text-[10px] font-extrabold text-amber-500 uppercase bg-amber-950/30 px-2 py-0.5 rounded">
+                    JOKER APPLIED (2x)
                   </div>
                 )}
               </div>
@@ -352,7 +352,7 @@ export default async function RaceDetailPage({ params }: RaceDetailPageProps) {
           {/* Detailed predictions list of other users (visible only after lock) */}
           <div className="glass-card rounded-xl p-6">
             <h3 className="text-xs font-bold uppercase tracking-widest text-zinc-400 mb-4 flex items-center gap-2">
-              <Trophy className="w-4 h-4 text-f1-red" /> Race Rankings
+              <Trophy className="w-4 h-4 text-f1-cyan" /> Race Rankings
             </h3>
 
             {!isLocked ? (
@@ -366,7 +366,7 @@ export default async function RaceDetailPage({ params }: RaceDetailPageProps) {
                 {allScoresForRace.map((sc, idx) => (
                   <div
                     key={sc.id}
-                    className="flex items-center justify-between p-2.5 rounded bg-zinc-900/50 border border-zinc-800/80 text-xs font-semibold"
+                    className="flex items-center justify-between p-2.5 rounded bg-zinc-900/50 text-xs font-semibold"
                   >
                     <div className="flex items-center gap-2.5">
                       <span className="text-[10px] text-zinc-500 font-bold w-4">#{idx + 1}</span>
@@ -374,9 +374,9 @@ export default async function RaceDetailPage({ params }: RaceDetailPageProps) {
                     </div>
                     <div className="flex items-center gap-2">
                       {((allPredictions.find(p => p.userId === sc.userId))?.isJoker) && (
-                        <span className="text-[9px] text-amber-500 font-bold bg-amber-950/40 px-1 py-0.5 rounded border border-amber-500/10">J</span>
+                        <span className="text-[9px] text-amber-500 font-bold bg-amber-950/40 px-1 py-0.5 rounded">J</span>
                       )}
-                      <span className="text-f1-red font-bold">{sc.points} pts</span>
+                      <span className="text-f1-cyan font-bold">{sc.points} pts</span>
                     </div>
                   </div>
                 ))}

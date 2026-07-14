@@ -116,7 +116,7 @@ export default async function ArenaDetailPage({ params }: ArenaDetailPageProps) 
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-xs bg-red-950/40 text-f1-red font-bold px-2 py-0.5 rounded border border-red-500/10 uppercase tracking-widest">
+              <span className="text-xs bg-cyan-950/40 text-f1-cyan font-bold px-2 py-0.5 rounded uppercase tracking-widest">
                 Arena League
               </span>
             </div>
@@ -136,9 +136,9 @@ export default async function ArenaDetailPage({ params }: ArenaDetailPageProps) 
         <div className="md:col-span-2 space-y-6">
           <h2 className="text-lg font-bold text-white uppercase tracking-wider italic">Arena Standings</h2>
 
-          <div className="glass-card rounded-xl overflow-hidden border border-zinc-800">
+          <div className="glass-card rounded-xl overflow-hidden">
             {/* Standings header */}
-            <div className="grid grid-cols-12 gap-4 px-5 py-3.5 bg-zinc-900/60 border-b border-zinc-850 text-[10px] font-bold text-zinc-400 uppercase tracking-widest">
+            <div className="grid grid-cols-12 gap-4 px-5 py-3.5 bg-zinc-900/60 text-[10px] font-bold text-zinc-400 uppercase tracking-widest">
               <div className="col-span-2 text-center">Pos</div>
               <div className="col-span-6">Driver / Player</div>
               <div className="col-span-2 text-center">Predicted</div>
@@ -146,16 +146,16 @@ export default async function ArenaDetailPage({ params }: ArenaDetailPageProps) 
             </div>
 
             {/* Standings list */}
-            <div className="divide-y divide-zinc-850">
+            <div className="space-y-1 py-1">
               {standings.map((player, index) => {
                 const rankColor =
                   index === 0
-                    ? "text-amber-400 bg-amber-950/30 border-amber-500/20"
+                    ? "text-amber-400 bg-amber-950/30"
                     : index === 1
-                    ? "text-zinc-300 bg-zinc-800/40 border-zinc-700/20"
+                    ? "text-zinc-300 bg-zinc-800/40"
                     : index === 2
-                    ? "text-amber-700 bg-amber-950/20 border-amber-900/10"
-                    : "text-zinc-500 bg-zinc-900/40 border-zinc-850";
+                    ? "text-amber-700 bg-amber-950/20"
+                    : "text-zinc-500 bg-zinc-900/40";
 
                 return (
                   <div
@@ -164,7 +164,7 @@ export default async function ArenaDetailPage({ params }: ArenaDetailPageProps) 
                   >
                     <div className="col-span-2 flex justify-center">
                       <span
-                        className={`h-6 w-6 rounded-full flex items-center justify-center font-bold text-[10px] border ${rankColor}`}
+                        className={`h-6 w-6 rounded-full flex items-center justify-center font-bold text-[10px] ${rankColor}`}
                       >
                         {index + 1}
                       </span>
@@ -173,7 +173,7 @@ export default async function ArenaDetailPage({ params }: ArenaDetailPageProps) 
                     <div className="col-span-6 font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
                       {player.name}
                       {player.id === league.ownerId && (
-                        <Shield className="w-3.5 h-3.5 text-f1-red" />
+                        <Shield className="w-3.5 h-3.5 text-f1-cyan" />
                       )}
                     </div>
 
@@ -181,7 +181,7 @@ export default async function ArenaDetailPage({ params }: ArenaDetailPageProps) 
                       {player.predictionCount}
                     </div>
 
-                    <div className="col-span-2 text-right font-black text-f1-red text-sm">
+                    <div className="col-span-2 text-right font-black text-f1-cyan text-sm">
                       {player.totalPoints} pts
                     </div>
                   </div>
@@ -194,9 +194,9 @@ export default async function ArenaDetailPage({ params }: ArenaDetailPageProps) 
         {/* Info & Admin actions */}
         <div className="space-y-6">
           {/* Members counter */}
-          <div className="glass-card rounded-xl p-6 border border-zinc-800">
+          <div className="glass-card rounded-xl p-6">
             <h3 className="text-xs font-bold uppercase tracking-widest text-zinc-400 mb-4 flex items-center gap-2">
-              <Users className="w-4 h-4 text-f1-red" /> Arena Info
+              <Users className="w-4 h-4 text-f1-cyan" /> Arena Info
             </h3>
 
             <div className="space-y-3 text-xs">
@@ -210,12 +210,12 @@ export default async function ArenaDetailPage({ params }: ArenaDetailPageProps) 
               </div>
             </div>
 
-            <div className="mt-6 border-t border-zinc-800/40 pt-4">
+            <div className="mt-6 pt-4">
               {isOwner ? (
                 <form action={handleDeleteAction}>
                   <button
                     type="submit"
-                    className="w-full bg-red-950/30 text-red-500 border border-red-500/20 hover:bg-red-500 hover:text-white transition py-2 text-xs rounded font-extrabold flex items-center justify-center gap-1.5 cursor-pointer"
+                    className="w-full bg-red-950/30 text-red-500 hover:bg-red-500 hover:text-white transition py-2 text-xs rounded font-extrabold flex items-center justify-center gap-1.5 cursor-pointer"
                   >
                     <Trash2 className="w-3.5 h-3.5" /> DELETE ARENA
                   </button>
@@ -224,7 +224,7 @@ export default async function ArenaDetailPage({ params }: ArenaDetailPageProps) 
                 <form action={handleLeaveAction}>
                   <button
                     type="submit"
-                    className="w-full bg-zinc-900 border border-zinc-800 hover:bg-red-650 hover:text-white transition py-2 text-xs rounded font-extrabold flex items-center justify-center gap-1.5 cursor-pointer"
+                    className="w-full bg-zinc-900 hover:bg-red-650 hover:text-white transition py-2 text-xs rounded font-extrabold flex items-center justify-center gap-1.5 cursor-pointer"
                   >
                     <LogOut className="w-3.5 h-3.5" /> LEAVE ARENA
                   </button>

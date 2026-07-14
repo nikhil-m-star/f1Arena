@@ -58,7 +58,7 @@ export default function SeasonRecapView({ history }: SeasonRecapViewProps) {
   return (
     <div className="space-y-6">
       {/* Mode selection card */}
-      <div className="glass-card p-5 rounded-xl border border-zinc-800 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="glass-card p-5 rounded-xl flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="space-y-1">
           <h3 className="text-sm font-bold text-white uppercase italic">Select AI Recap Mode</h3>
           <p className="text-xs text-zinc-500 font-medium max-w-sm">
@@ -66,12 +66,12 @@ export default function SeasonRecapView({ history }: SeasonRecapViewProps) {
           </p>
         </div>
 
-        <div className="flex bg-zinc-900 p-1 rounded-lg border border-zinc-800">
+        <div className="flex bg-zinc-900 p-1 rounded-lg">
           <button
             onClick={() => setMode("analyzer")}
             className={`flex items-center gap-1.5 px-4 py-1.5 rounded-md text-xs font-extrabold uppercase tracking-wider transition cursor-pointer ${
               mode === "analyzer"
-                ? "bg-zinc-800 text-neon-cyan shadow-sm"
+                ? "bg-zinc-800 text-f1-cyan shadow-sm"
                 : "text-zinc-500 hover:text-zinc-300"
             }`}
           >
@@ -82,7 +82,7 @@ export default function SeasonRecapView({ history }: SeasonRecapViewProps) {
             onClick={() => setMode("roaster")}
             className={`flex items-center gap-1.5 px-4 py-1.5 rounded-md text-xs font-extrabold uppercase tracking-wider transition cursor-pointer ${
               mode === "roaster"
-                ? "bg-zinc-800 text-f1-red shadow-sm"
+                ? "bg-zinc-800 text-f1-cyan shadow-sm"
                 : "text-zinc-500 hover:text-zinc-300"
             }`}
           >
@@ -96,11 +96,7 @@ export default function SeasonRecapView({ history }: SeasonRecapViewProps) {
       <button
         onClick={handleGenerate}
         disabled={loading}
-        className={`w-full py-3.5 rounded-xl flex items-center justify-center gap-2 cursor-pointer transition font-extrabold uppercase tracking-wider text-xs border ${
-          mode === "analyzer"
-            ? "bg-cyan-950/20 text-cyan-400 border-cyan-500/20 hover:bg-cyan-900/20 shadow-[0_0_15px_rgba(6,182,212,0.1)]"
-            : "bg-red-950/20 text-f1-red border-red-500/20 hover:bg-red-900/20 shadow-[0_0_15px_rgba(225,6,0,0.1)]"
-        }`}
+        className="w-full py-3.5 rounded-xl flex items-center justify-center gap-2 cursor-pointer transition font-extrabold uppercase tracking-wider text-xs bg-cyan-950/20 text-f1-cyan hover:bg-cyan-900/20"
       >
         {loading ? (
           <>
@@ -117,7 +113,7 @@ export default function SeasonRecapView({ history }: SeasonRecapViewProps) {
 
       {/* Error display */}
       {error && (
-        <div className="flex items-start gap-2.5 p-4 rounded bg-red-950/40 text-red-400 border border-red-500/20 text-sm font-semibold">
+        <div className="flex items-start gap-2.5 p-4 rounded bg-red-950/40 text-red-400 text-sm font-semibold">
           <AlertCircle className="w-4 h-4 mt-0.5 flex-shrink-0" />
           <span>{error}</span>
         </div>
@@ -125,23 +121,11 @@ export default function SeasonRecapView({ history }: SeasonRecapViewProps) {
 
       {/* Recap report content */}
       {recap && (
-        <div
-          className={`glass-card p-6 rounded-xl border relative overflow-hidden leading-relaxed shadow-lg ${
-            mode === "analyzer" ? "border-cyan-500/20" : "border-red-500/20"
-          }`}
-        >
+        <div className="glass-card p-6 rounded-xl relative overflow-hidden leading-relaxed shadow-lg">
           {/* Top colored indicator bar */}
-          <div
-            className={`absolute top-0 left-0 h-1 w-full ${
-              mode === "analyzer" ? "bg-neon-cyan" : "bg-f1-red"
-            }`}
-          ></div>
+          <div className="absolute top-0 left-0 h-1 w-full bg-f1-cyan" />
 
-          <h3
-            className={`text-base font-extrabold uppercase italic mb-4 flex items-center gap-1.5 ${
-              mode === "analyzer" ? "text-neon-cyan" : "text-f1-red"
-            }`}
-          >
+          <h3 className="text-base font-extrabold uppercase italic mb-4 flex items-center gap-1.5 text-f1-cyan">
             {mode === "analyzer" ? (
               <>
                 <BarChart3 className="w-4 h-4" /> Season Telemetry Analysis

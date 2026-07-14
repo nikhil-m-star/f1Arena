@@ -32,10 +32,10 @@ export default async function CalendarPage() {
 
       {/* Countdown Card for Upcoming Race */}
       {upcomingRace && (
-        <div className="glass-card rounded-xl p-6 mb-10 border-l-4 border-l-f1-red relative overflow-hidden">
+        <div className="glass-card rounded-xl p-6 mb-10 relative overflow-hidden">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div>
-              <span className="inline-flex items-center gap-1 text-[10px] font-bold text-f1-red uppercase tracking-widest bg-red-950/40 px-2 py-0.5 rounded border border-red-500/10">
+              <span className="inline-flex items-center gap-1 text-[10px] font-bold text-f1-cyan uppercase tracking-widest bg-cyan-950/40 px-2 py-0.5 rounded">
                 Next Prediction Deadline
               </span>
               <h2 className="text-2xl font-black italic uppercase text-white mt-2">
@@ -51,9 +51,9 @@ export default async function CalendarPage() {
               </div>
             </div>
 
-            <div className="flex flex-col items-start md:items-end gap-1.5 bg-zinc-900/40 p-4 rounded border border-zinc-800/40 min-w-[200px]">
+            <div className="flex flex-col items-start md:items-end gap-1.5 bg-zinc-900/40 p-4 rounded min-w-[200px]">
               <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider flex items-center gap-1">
-                <Clock className="w-3 h-3 text-f1-red" /> Submissions Close In
+                <Clock className="w-3 h-3 text-f1-cyan" /> Submissions Close In
               </span>
               <RaceCountdown qualiDateTime={upcomingRace.qualiDateTime.toISOString()} />
               <Link
@@ -80,26 +80,19 @@ export default async function CalendarPage() {
             <div
               key={race.id}
               className={`glass-card rounded-xl p-5 flex flex-col justify-between transition relative overflow-hidden ${
-                isLocked ? "opacity-75 border-zinc-800 bg-zinc-900/20" : "border-zinc-800"
+                isLocked ? "opacity-75 bg-zinc-900/20" : ""
               }`}
             >
-              {/* Top border indicator */}
-              <div
-                className={`absolute top-0 left-0 h-0.5 w-full ${
-                  isLocked ? "bg-zinc-800" : "bg-f1-red"
-                }`}
-              ></div>
-
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-xs font-bold text-zinc-500">ROUND {race.round}</span>
                   {isLocked ? (
-                    <span className="inline-flex items-center gap-1 rounded bg-zinc-800/80 px-2 py-0.5 text-[10px] font-bold text-zinc-400 border border-zinc-700/30">
+                    <span className="inline-flex items-center gap-1 rounded bg-zinc-800/80 px-2 py-0.5 text-[10px] font-bold text-zinc-400">
                       <Lock className="w-2.5 h-2.5 text-zinc-500" /> LOCKED
                     </span>
                   ) : (
-                    <span className="inline-flex items-center gap-1 rounded bg-emerald-950/40 px-2 py-0.5 text-[10px] font-bold text-emerald-500 border border-emerald-500/20">
-                      <Unlock className="w-2.5 h-2.5 text-emerald-500 animate-pulse" /> OPEN
+                    <span className="inline-flex items-center gap-1 rounded bg-emerald-950/40 px-2 py-0.5 text-[10px] font-bold text-emerald-500">
+                      <Unlock className="w-2.5 h-2.5 text-emerald-500" /> OPEN
                     </span>
                   )}
                 </div>
@@ -143,14 +136,14 @@ export default async function CalendarPage() {
                 </div>
               </div>
 
-              <div className="mt-6 border-t border-zinc-800/40 pt-4 flex items-center justify-between gap-4">
+              <div className="mt-6 pt-4 flex items-center justify-between gap-4">
                 <span className="text-[10px] font-bold">
                   {hasResult ? (
                     <span className="text-neon-green">RESULTS INGESTED</span>
                   ) : isLocked ? (
                     <span className="text-zinc-500">AWAITING RESULTS</span>
                   ) : (
-                    <span className="text-f1-red animate-pulse">PREDICT NOW</span>
+                    <span className="text-f1-cyan animate-pulse">PREDICT NOW</span>
                   )}
                 </span>
 
