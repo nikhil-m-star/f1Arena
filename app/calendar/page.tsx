@@ -2,6 +2,7 @@ import { db } from "@/lib/db";
 import Link from "next/link";
 import { Clock, Lock, Unlock, MapPin, Calendar as CalendarIcon, ChevronRight } from "lucide-react";
 import RaceCountdown from "@/components/RaceCountdown";
+import { getRaceImageUrl } from "@/lib/race-images";
 
 export const revalidate = 0;
 
@@ -96,12 +97,23 @@ export default async function CalendarPage() {
                   )}
                 </div>
 
-                <h4 className="text-lg font-bold text-white uppercase truncate">
-                  {race.name}
-                </h4>
-                <p className="text-xs text-zinc-500 font-semibold truncate mt-0.5">
-                  {race.circuit}
-                </p>
+                <div className="flex items-center justify-between gap-4 mt-2">
+                  <div className="flex-1 min-w-0">
+                    <h4 className="text-lg font-bold text-white uppercase truncate">
+                      {race.name}
+                    </h4>
+                    <p className="text-xs text-zinc-550 font-semibold truncate mt-0.5">
+                      {race.circuit}
+                    </p>
+                  </div>
+                  <div className="flex-shrink-0 bg-zinc-900/30 p-2 rounded-lg flex items-center justify-center h-14 w-20">
+                    <img
+                      src={getRaceImageUrl(race.name)}
+                      alt="Track map"
+                      className="h-full w-auto object-contain filter invert opacity-90"
+                    />
+                  </div>
+                </div>
 
                 <div className="mt-4 space-y-1.5 text-xs text-zinc-400">
                   <div className="flex items-center gap-1.5">

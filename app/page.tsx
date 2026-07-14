@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Trophy, Flag, Users, Clock, Sparkles, Shield, ChevronRight } from "lucide-react";
 import RaceCountdown from "@/components/RaceCountdown";
 import { auth, SignInButton, SignUpButton, Show } from "@clerk/nextjs";
+import { getRaceImageUrl } from "@/lib/race-images";
 
 export const revalidate = 0; // Disable caching to ensure fresh dashboard state
 
@@ -134,26 +135,34 @@ export default async function Home() {
           {/* Upcoming Race Lock Box */}
           {upcomingRace ? (
             <div className="glass-card rounded-2xl p-8 relative overflow-hidden">
-              <div className="absolute top-0 right-0 h-1.5 bg-f1-cyan w-full"></div>
-              
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
-                <div>
-                  <span className="text-xs font-bold uppercase tracking-wider text-f1-cyan">Upcoming Round</span>
-                  <h2 className="text-3xl font-black uppercase text-white mt-2">
-                    {upcomingRace.name}
-                  </h2>
-                  <p className="text-sm text-zinc-550 font-bold mt-1">{upcomingRace.circuit}</p>
+              <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+                <div className="flex-1 space-y-6">
+                  <div>
+                    <span className="text-xs font-bold uppercase tracking-wider text-f1-cyan">Upcoming Round</span>
+                    <h2 className="text-3xl font-black uppercase text-white mt-2">
+                      {upcomingRace.name}
+                    </h2>
+                    <p className="text-sm text-zinc-550 font-bold mt-1">{upcomingRace.circuit}</p>
+                  </div>
+
+                  <div className="flex flex-col items-start gap-1.5">
+                    <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider flex items-center gap-1">
+                      <Clock className="w-3.5 h-3.5 text-f1-cyan" /> Submissions Close
+                    </span>
+                    <RaceCountdown qualiDateTime={upcomingRace.qualiDateTime.toISOString()} />
+                  </div>
                 </div>
 
-                <div className="flex flex-col items-start sm:items-end gap-1.5">
-                  <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider flex items-center gap-1">
-                    <Clock className="w-3.5 h-3.5 text-f1-cyan" /> Submissions Close
-                  </span>
-                  <RaceCountdown qualiDateTime={upcomingRace.qualiDateTime.toISOString()} />
+                <div className="flex-shrink-0 bg-zinc-900/30 p-4 rounded-xl flex items-center justify-center h-28 w-44">
+                  <img
+                    src={getRaceImageUrl(upcomingRace.name)}
+                    alt="Circuit Map"
+                    className="h-full w-auto object-contain filter invert opacity-90"
+                  />
                 </div>
               </div>
 
-              <div className="my-8 h-px bg-zinc-900" />
+              <div className="my-8" />
 
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
                 <div className="text-sm text-zinc-400 font-semibold">

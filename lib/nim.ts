@@ -56,7 +56,7 @@ async function callNvidiaNim(prompt: string, systemPrompt: string): Promise<stri
         Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: "meta/llama-3.3-70b-instruct",
+        model: "meta/llama-3.1-70b-instruct",
         messages: [
           { role: "system", content: systemPrompt },
           { role: "user", content: prompt },
@@ -65,8 +65,8 @@ async function callNvidiaNim(prompt: string, systemPrompt: string): Promise<stri
         max_tokens: 512,
         top_p: 0.9,
       }),
-      // Set a short timeout (e.g. 5 seconds) to avoid blocking
-      signal: AbortSignal.timeout(6000),
+      // Set a timeout to avoid blocking indefinitely
+      signal: AbortSignal.timeout(12000),
     });
 
     if (!response.ok) {

@@ -97,6 +97,8 @@ export async function submitPrediction(payload: PredictionPayload) {
 
     revalidatePath(`/races/${raceId}`);
     revalidatePath("/calendar");
+    revalidatePath("/");
+    revalidatePath("/profile");
     return { success: true, prediction };
   } catch (error: any) {
     console.error("Submit prediction error:", error);

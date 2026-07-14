@@ -32,13 +32,14 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col bg-zinc-950 text-zinc-50">
         <ClerkProvider>
-          <header className="sticky top-0 z-50 flex h-16 items-center justify-between bg-zinc-950/80 px-6 backdrop-blur-md">
+          <header className="fixed top-4 left-1/2 -translate-x-1/2 z-50 flex items-center justify-between bg-zinc-950/80 px-6 py-2.5 rounded-full backdrop-blur-md shadow-lg w-[calc(100%-2rem)] max-w-4xl">
             <div className="flex items-center gap-8">
               <Link href="/" className="flex items-center font-black tracking-wider text-xl text-white">
                 <span className="bg-f1-cyan px-2 py-0.5 rounded text-zinc-950 font-extrabold mr-1">F1</span>
                 <span className="font-extrabold">ARENA</span>
               </Link>
               <nav className="hidden md:flex items-center gap-6 text-sm font-semibold text-zinc-400">
+                <Link href="/" className="hover:text-white transition-colors duration-150">Home</Link>
                 <Link href="/calendar" className="hover:text-white transition-colors duration-150">Calendar</Link>
                 <Link href="/leaderboard" className="hover:text-white transition-colors duration-150">Leaderboard</Link>
                 <Link href="/arenas" className="hover:text-white transition-colors duration-150">Arenas</Link>
@@ -65,7 +66,7 @@ export default function RootLayout({
             </div>
           </header>
           
-          <main className="flex-1 flex flex-col">
+          <main className="flex-1 flex flex-col pt-20">
             {children}
           </main>
           

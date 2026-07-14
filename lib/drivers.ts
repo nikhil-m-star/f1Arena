@@ -19,13 +19,18 @@ export const DRIVERS: Driver[] = [
   { id: "sainz", name: "Carlos Sainz", code: "SAI", team: "Williams" },
   { id: "albon", name: "Alexander Albon", code: "ALB", team: "Williams" },
   { id: "gasly", name: "Pierre Gasly", code: "GAS", team: "Alpine" },
+  { id: "doohan", name: "Jack Doohan", code: "DOO", team: "Alpine" },
   { id: "ocon", name: "Esteban Ocon", code: "OCO", team: "Haas" },
   { id: "bearman", name: "Oliver Bearman", code: "BEA", team: "Haas" },
   { id: "hulkenberg", name: "Nico Hülkenberg", code: "HUL", team: "Kick Sauber" },
   { id: "bortoleto", name: "Gabriel Bortoleto", code: "BOR", team: "Kick Sauber" },
   { id: "tsunoda", name: "Yuki Tsunoda", code: "TSU", team: "RB" },
   { id: "lawson", name: "Liam Lawson", code: "LAW", team: "RB" },
-  { id: "colapinto", name: "Franco Colapinto", code: "COL", team: "Alpine" } // fallback/additional
+  { id: "colapinto", name: "Franco Colapinto", code: "COL", team: "Alpine" },
+  { id: "ricciardo", name: "Daniel Ricciardo", code: "RIC", team: "RB" },
+  { id: "bottas", name: "Valtteri Bottas", code: "BOT", team: "Kick Sauber" },
+  { id: "zhou", name: "Zhou Guanyu", code: "ZHO", team: "Kick Sauber" },
+  { id: "magnussen", name: "Kevin Magnussen", code: "MAG", team: "Haas" }
 ];
 
 export function getDriverName(id: string): string {

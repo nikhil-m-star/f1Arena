@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { getDriverName, getDriverCode } from "@/lib/drivers";
 import PredictionForm from "@/components/PredictionForm";
 import RaceCountdown from "@/components/RaceCountdown";
+import { getRaceImageUrl } from "@/lib/race-images";
 import {
   Clock,
   MapPin,
@@ -125,8 +126,8 @@ export default async function RaceDetailPage({ params }: RaceDetailPageProps) {
 
       {/* Hero Header */}
       <div className="glass-card rounded-2xl p-8 mb-8 relative overflow-hidden">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div>
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
+          <div className="flex-1 space-y-4">
             <div className="flex items-center gap-2">
               <span className="text-xs bg-zinc-800 text-zinc-300 font-bold px-2 py-0.5 rounded">
                 Round {race.round}
@@ -141,8 +142,8 @@ export default async function RaceDetailPage({ params }: RaceDetailPageProps) {
                 </span>
               )}
             </div>
-            <h1 className="text-4xl font-black uppercase text-white mt-3">{race.name}</h1>
-            <div className="flex flex-wrap gap-x-4 gap-y-1.5 text-xs text-zinc-400 mt-2 font-medium">
+            <h1 className="text-4xl font-black uppercase text-white">{race.name}</h1>
+            <div className="flex flex-wrap gap-x-4 gap-y-1.5 text-xs text-zinc-400 font-medium">
               <span className="flex items-center gap-1">
                 <MapPin className="w-4 h-4 text-zinc-500" /> {race.circuit}
               </span>
@@ -152,10 +153,18 @@ export default async function RaceDetailPage({ params }: RaceDetailPageProps) {
             </div>
           </div>
 
+          <div className="flex-shrink-0 bg-zinc-900/30 p-4 rounded-xl flex items-center justify-center h-28 w-44">
+            <img
+              src={getRaceImageUrl(race.name)}
+              alt="Circuit Map"
+              className="h-full w-auto object-contain filter invert opacity-90"
+            />
+          </div>
+
           {!isLocked && (
             <div className="flex flex-col items-start md:items-end gap-1.5 bg-zinc-900/40 p-4 rounded min-w-[200px]">
               <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider flex items-center gap-1">
-                <Clock className="w-3 h-3 text-f1-cyan" /> Submissions Close In
+                <Clock className="w-3 h-3 text-f1-cyan" /> Submissions Close
               </span>
               <RaceCountdown qualiDateTime={race.qualiDateTime.toISOString()} />
             </div>
