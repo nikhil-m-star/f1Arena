@@ -1,0 +1,105 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id          String   @id @default(uuid())
+  clerkId     String   @unique
+  name        String
+  email       String
+  createdAt   DateTime @default(now())
+  
+  predictions Prediction[]
+  scores      Score[]
+  leaguesOwned League[]
+  memberships LeagueMembership[]
+}
+
+model Race {
+  id            String   @id @default(uuid())
+  season        Int
+  round         Int
+  name          String
+  circuit       String
+  qualiDateTime DateTime
+  raceDateTime  DateTime
+  locked        Boolean  @default(false)
+  
+  predictions   Prediction[]
+  result        RaceResult?
+  scores        Score[]
+}
+
+model Prediction {
+  id                  String   @id @default(uuid())
+  userId              String
+  raceId              String
+  predictedP1         String
+  predictedP2         String
+  predictedP3         String
+  predictedFastestLap String
+  predictedDNF        String?
+  isJoker             Boolean  @default(false)
+  submittedAt         DateTime @default(now())
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  race Race @relation(fields: [raceId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, raceId])
+}
+
+model RaceResult {
+  id                 String   @id @default(uuid())
+  raceId             String   @unique
+  actualP1           String
+  actualP2           String
+  actualP3           String
+  actualFastestLap   String
+  actualDNFs         String[]
+  source             String   // "api" | "manual"
+  
+  race Race @relation(fields: [raceId], references: [id], onDelete: Cascade)
+}
+
+model Score {
+  id                     String   @id @default(uuid())
+  userId                 String
+  raceId                 String
+  points                 Int
+  breakdown              Json     // e.g. {podiumPoints, fastestLapPoints, dnfPoints, jokerMultiplierApplied}
+  aiRecap                String?
+  aiRoast                String?
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  race Race @relation(fields: [raceId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, raceId])
+}
+
+model League {
+  id          String   @id @default(uuid())
+  name        String
+  inviteCode  String   @unique
+  ownerId     String
+  createdAt   DateTime @default(now())
+  
+  owner       User               @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  memberships LeagueMembership[]
+}
+
+model LeagueMembership {
+  userId   String
+  leagueId String
+  
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  league League @relation(fields: [leagueId], references: [id], onDelete: Cascade)
+  
+  @@id([userId, leagueId])
+}
