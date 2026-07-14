@@ -6,13 +6,38 @@ const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
 
+type JolpicaSeedRace = {
+  season: string;
+  round: string;
+  raceName: string;
+  Circuit: {
+    circuitName: string;
+  };
+  date: string;
+  time?: string;
+  Qualifying?: {
+    date?: string;
+    time?: string;
+  };
+};
+
+type JolpicaSeedResponse = {
+  MRData: {
+    RaceTable: {
+      Races: JolpicaSeedRace[];
+    };
+  };
+};
+
 async function main() {
-  console.log("Seeding races for F1 2026 season...");
+  console.log("Seeding races for the current F1 season...");
   try {
-    const res = await fetch("https://api.jolpi.ca/ergast/f1/2026.json");
+    const res = await fetch("https://api.jolpi.ca/ergast/f1/current.json", {
+      cache: "no-store",
+    });
     if (!res.ok) throw new Error("Failed to fetch calendar from Jolpica API");
     
-    const data = await res.json() as any;
+    const data = await res.json() as JolpicaSeedResponse;
     const races = data.MRData.RaceTable.Races;
 
     for (const r of races) {
@@ -32,7 +57,7 @@ async function main() {
 
       // Upsert race
       await prisma.race.upsert({
-        where: { id: `2026-${round}` },
+        where: { id: `${season}-${round}` },
         update: {
           season,
           round,
@@ -42,7 +67,7 @@ async function main() {
           raceDateTime,
         },
         create: {
-          id: `2026-${round}`,
+          id: `${season}-${round}`,
           season,
           round,
           name,

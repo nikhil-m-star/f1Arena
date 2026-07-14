@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
+import type { Prisma } from "@prisma/client";
 import { db } from "@/lib/db";
 import { calculateScore } from "@/lib/scoring";
 import { getRaceRecap, getRaceRoast } from "@/lib/nim";
+import { fetchRaceResult, getCurrentSeasonContext, syncCurrentSeasonCalendar } from "@/lib/f1-data";
 
 export async function GET(request: Request) {
   // Allow manual override key in headers or query params to secure it slightly
@@ -17,6 +19,7 @@ export async function GET(request: Request) {
   }
 
   try {
+    const calendarSync = await syncCurrentSeasonCalendar();
     const now = new Date();
     
     // Find races in the past that don't have results yet
@@ -36,44 +39,27 @@ export async function GET(request: Request) {
 
     for (const race of pastRaces) {
       console.log(`Fetching results for ${race.name} (Round ${race.round})...`);
-      
-      const res = await fetch(`https://api.jolpi.ca/ergast/f1/${race.season}/${race.round}/results.json`);
-      if (!res.ok) {
-        console.error(`Failed to fetch results for Round ${race.round} from Jolpica API.`);
-        continue;
-      }
 
-      const data = await res.json() as any;
-      const raceData = data.MRData.RaceTable.Races[0];
-
-      if (!raceData || !raceData.Results || raceData.Results.length === 0) {
+      const result = await fetchRaceResult(race.season, race.round);
+      if (!result) {
         console.log(`Results not yet available in Jolpica API for Round ${race.round}.`);
         continue;
       }
 
-      const results = raceData.Results;
-
-      // Extract actual P1, P2, P3
-      const actualP1 = results[0]?.Driver?.driverId || "";
-      const actualP2 = results[1]?.Driver?.driverId || "";
-      const actualP3 = results[2]?.Driver?.driverId || "";
-
-      // Extract actual Fastest Lap
-      const fastestLapResult = results.find((r: any) => r.FastestLap?.rank === "1");
-      const actualFastestLap = fastestLapResult?.Driver?.driverId || "";
-
-      // Extract DNFs: status does not contain "Finished" and does not start with "+" (like +1 Lap)
-      const actualDNFs = results
-        .filter((r: any) => {
-          const status = r.status || "";
-          return !status.includes("Finished") && !status.startsWith("+");
-        })
-        .map((r: any) => r.Driver?.driverId)
-        .filter(Boolean);
+      const { actualP1, actualP2, actualP3, actualFastestLap, actualDNFs } = result;
 
       // Create the race result
-      const raceResult = await db.raceResult.create({
-        data: {
+      await db.raceResult.upsert({
+        where: { raceId: race.id },
+        update: {
+          actualP1,
+          actualP2,
+          actualP3,
+          actualFastestLap,
+          actualDNFs,
+          source: "api",
+        },
+        create: {
           raceId: race.id,
           actualP1,
           actualP2,
@@ -96,6 +82,7 @@ export async function GET(request: Request) {
       });
 
       console.log(`Scoring ${predictions.length} predictions for ${race.name}...`);
+      const seasonContext = await getCurrentSeasonContext(race.name);
 
       for (const pred of predictions) {
         // Calculate score breakdown
@@ -129,12 +116,14 @@ export async function GET(request: Request) {
               prediction: pred,
               result: { actualP1, actualP2, actualP3, actualFastestLap, actualDNFs },
               points,
+              seasonContext,
             }),
             getRaceRoast({
               raceName: race.name,
               prediction: pred,
               result: { actualP1, actualP2, actualP3, actualFastestLap, actualDNFs },
               points,
+              seasonContext,
             }),
           ]);
 
@@ -154,7 +143,7 @@ export async function GET(request: Request) {
           },
           update: {
             points,
-            breakdown: breakdown as any,
+            breakdown: breakdown as unknown as Prisma.InputJsonValue,
             aiRecap,
             aiRoast,
           },
@@ -162,7 +151,7 @@ export async function GET(request: Request) {
             userId: pred.userId,
             raceId: race.id,
             points,
-            breakdown: breakdown as any,
+            breakdown: breakdown as unknown as Prisma.InputJsonValue,
             aiRecap,
             aiRoast,
           },
@@ -178,11 +167,13 @@ export async function GET(request: Request) {
 
     return NextResponse.json({
       success: true,
+      calendarSync,
       processedCount: processedRaces.length,
       races: processedRaces,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Cron ingest error:", error);
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+    const message = error instanceof Error ? error.message : "Unknown cron ingest error";
+    return NextResponse.json({ success: false, error: message }, { status: 500 });
   }
 }

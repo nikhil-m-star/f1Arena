@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getSeasonRecap } from "@/lib/nim";
+import { getCurrentSeasonContext } from "@/lib/f1-data";
 
 export async function POST(request: Request) {
   try {
@@ -10,15 +11,17 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Missing or invalid fields" }, { status: 400 });
     }
 
-    const recap = await getSeasonRecap({ history }, mode);
+    const seasonContext = await getCurrentSeasonContext();
+    const recap = await getSeasonRecap({ history, seasonContext }, mode);
 
     if (!recap) {
       return NextResponse.json({ success: false, error: "NVIDIA NIM was unable to generate a recap." }, { status: 500 });
     }
 
     return NextResponse.json({ success: true, recap });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("AI Season Recap API error:", error);
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+    const message = error instanceof Error ? error.message : "Unable to generate season recap";
+    return NextResponse.json({ success: false, error: message }, { status: 500 });
   }
 }

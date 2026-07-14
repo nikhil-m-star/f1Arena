@@ -1,3 +1,13 @@
+import { getDriverName, getDriverTeam } from "@/lib/drivers";
+
+type NvidiaNimResponse = {
+  choices?: Array<{
+    message?: {
+      content?: string;
+    };
+  }>;
+};
+
 export interface AICommentaryInput {
   raceName: string;
   p1: string;
@@ -5,6 +15,7 @@ export interface AICommentaryInput {
   p3: string;
   fastestLap: string;
   dnf: string | null;
+  seasonContext?: string;
 }
 
 export interface AIRecapInput {
@@ -24,6 +35,7 @@ export interface AIRecapInput {
     actualDNFs: string[];
   };
   points: number;
+  seasonContext?: string;
 }
 
 export interface AISeasonRecapInput {
@@ -39,6 +51,18 @@ export interface AISeasonRecapInput {
       jokerMultiplierApplied: boolean;
     };
   }>;
+  seasonContext?: string;
+}
+
+function describeDriver(driverId: string | null | undefined) {
+  if (!driverId) return "None";
+  return `${getDriverName(driverId)} (${driverId}, ${getDriverTeam(driverId)})`;
+}
+
+function contextBlock(seasonContext?: string) {
+  return seasonContext
+    ? `\nLive season context from the app's data feed:\n${seasonContext}\n`
+    : "";
 }
 
 async function callNvidiaNim(prompt: string, systemPrompt: string): Promise<string | null> {
@@ -74,8 +98,8 @@ async function callNvidiaNim(prompt: string, systemPrompt: string): Promise<stri
       return null;
     }
 
-    const data = await response.json() as any;
-    return data.choices[0]?.message?.content?.trim() || null;
+    const data = await response.json() as NvidiaNimResponse;
+    return data.choices?.[0]?.message?.content?.trim() || null;
   } catch (error) {
     console.error("NVIDIA NIM call failed:", error);
     return null;
@@ -88,14 +112,15 @@ async function callNvidiaNim(prompt: string, systemPrompt: string): Promise<stri
 export async function getConfidenceCommentary(input: AICommentaryInput): Promise<string | null> {
   const systemPrompt = "You are a witty, knowledgeable Formula 1 expert who gives quick feedback on fan predictions.";
   const prompt = `A user is making F1 predictions for the ${input.raceName}.
+${contextBlock(input.seasonContext)}
 Predictions selected:
-- Winner (P1): ${input.p1}
-- Runner-up (P2): ${input.p2}
-- Third Place (P3): ${input.p3}
-- Fastest Lap: ${input.fastestLap}
-- DNF Pick: ${input.dnf || "None"}
+- Winner (P1): ${describeDriver(input.p1)}
+- Runner-up (P2): ${describeDriver(input.p2)}
+- Third Place (P3): ${describeDriver(input.p3)}
+- Fastest Lap: ${describeDriver(input.fastestLap)}
+- DNF Pick: ${describeDriver(input.dnf)}
 
-Give a wittily brief 1-2 sentence commentary analyzing their choices (e.g., driver form, teammate dynamics, track characteristics). Be casual, conversational, and direct. Do not write any greeting or intro.`;
+Give a wittily brief 1-2 sentence commentary analyzing their choices using the live season context where relevant. Be casual, conversational, and direct. Do not invent facts beyond the context. Do not write any greeting or intro.`;
 
   return callNvidiaNim(prompt, systemPrompt);
 }
@@ -106,15 +131,16 @@ Give a wittily brief 1-2 sentence commentary analyzing their choices (e.g., driv
 export async function getRaceRecap(input: AIRecapInput): Promise<string | null> {
   const systemPrompt = "You are a friendly, encouraging F1 race analyst summarizing a user's predictions.";
   const prompt = `Summarize a user's prediction vs actual results for the ${input.raceName}.
+${contextBlock(input.seasonContext)}
 User's Prediction:
-- Podium: P1: ${input.prediction.predictedP1}, P2: ${input.prediction.predictedP2}, P3: ${input.prediction.predictedP3}
-- Fastest Lap: ${input.prediction.predictedFastestLap}
-- DNF: ${input.prediction.predictedDNF || "None"}
+- Podium: P1: ${describeDriver(input.prediction.predictedP1)}, P2: ${describeDriver(input.prediction.predictedP2)}, P3: ${describeDriver(input.prediction.predictedP3)}
+- Fastest Lap: ${describeDriver(input.prediction.predictedFastestLap)}
+- DNF: ${describeDriver(input.prediction.predictedDNF)}
 
 Actual Race Results:
-- Podium: P1: ${input.result.actualP1}, P2: ${input.result.actualP2}, P3: ${input.result.actualP3}
-- Fastest Lap: ${input.result.actualFastestLap}
-- DNFs: ${input.result.actualDNFs.join(", ") || "None"}
+- Podium: P1: ${describeDriver(input.result.actualP1)}, P2: ${describeDriver(input.result.actualP2)}, P3: ${describeDriver(input.result.actualP3)}
+- Fastest Lap: ${describeDriver(input.result.actualFastestLap)}
+- DNFs: ${input.result.actualDNFs.map(describeDriver).join(", ") || "None"}
 
 The user earned a total of ${input.points} points.
 Write a wittily friendly 1-2 sentence recap highlighting what they got right (if anything) and where they fell short. Be supportive but professional. Do not write any intro or greeting.`;
@@ -128,15 +154,16 @@ Write a wittily friendly 1-2 sentence recap highlighting what they got right (if
 export async function getRaceRoast(input: AIRecapInput): Promise<string | null> {
   const systemPrompt = "You are a savage, sarcastic F1 commentator who roasts fans for their terrible predictions.";
   const prompt = `Roast a user's F1 prediction for the ${input.raceName} based on actual results.
+${contextBlock(input.seasonContext)}
 User's Prediction:
-- Podium: P1: ${input.prediction.predictedP1}, P2: ${input.prediction.predictedP2}, P3: ${input.prediction.predictedP3}
-- Fastest Lap: ${input.prediction.predictedFastestLap}
-- DNF: ${input.prediction.predictedDNF || "None"}
+- Podium: P1: ${describeDriver(input.prediction.predictedP1)}, P2: ${describeDriver(input.prediction.predictedP2)}, P3: ${describeDriver(input.prediction.predictedP3)}
+- Fastest Lap: ${describeDriver(input.prediction.predictedFastestLap)}
+- DNF: ${describeDriver(input.prediction.predictedDNF)}
 
 Actual Race Results:
-- Podium: P1: ${input.result.actualP1}, P2: ${input.result.actualP2}, P3: ${input.result.actualP3}
-- Fastest Lap: ${input.result.actualFastestLap}
-- DNFs: ${input.result.actualDNFs.join(", ") || "None"}
+- Podium: P1: ${describeDriver(input.result.actualP1)}, P2: ${describeDriver(input.result.actualP2)}, P3: ${describeDriver(input.result.actualP3)}
+- Fastest Lap: ${describeDriver(input.result.actualFastestLap)}
+- DNFs: ${input.result.actualDNFs.map(describeDriver).join(", ") || "None"}
 
 The user earned a total of ${input.points} points.
 Write a savage, sarcastic 1-2 sentence roast calling out their biggest whiff, worst choice, or general lack of F1 knowledge. Be funny and biting, but keep it PG-13. Do not write any intro or greeting.`;
@@ -162,6 +189,7 @@ export async function getSeasonRecap(input: AISeasonRecapInput, mode: "analyzer"
 
   const prompt = mode === "analyzer"
     ? `Analyze the user's prediction history so far this season:
+${contextBlock(input.seasonContext)}
 ${historyStr}
 
 Please provide a structured, detailed analysis:
@@ -171,6 +199,7 @@ Please provide a structured, detailed analysis:
 4. **Concrete Advice**: Give one data-grounded strategic tip on how they can improve their predictions (e.g., being less biased, managing their Joker usage, or playing safer).
 Keep it insightful, professional, and clearly structured.`
     : `Roast the user's prediction history so far this season:
+${contextBlock(input.seasonContext)}
 ${historyStr}
 
 Write a sarcastic, hilarious, and wittily brutal season roast. Identify their most confidently-wrong calls, biggest whiffs, worst races, and overall strategy. Use bullet points for the roast categories, and write in the style of a teasing, opinionated F1 pundit.`;

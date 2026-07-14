@@ -1,8 +1,10 @@
 import { PrismaClient } from "@prisma/client";
+import type { Prisma } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { Pool } from "pg";
 import { calculateScore } from "../lib/scoring";
 import { getRaceRecap, getRaceRoast } from "../lib/nim";
+import { getCurrentSeasonContext } from "../lib/f1-data";
 import "dotenv/config";
 
 const connectionString = process.env.DATABASE_URL;
@@ -36,7 +38,8 @@ Example:
   const actualFastestLap = args[4];
   const actualDNFs = args[5] ? args[5].split(",").map(d => d.trim()).filter(Boolean) : [];
 
-  const raceId = `2026-${round}`;
+  const season = Number(process.env.F1_SEASON || new Date().getUTCFullYear());
+  const raceId = `${season}-${round}`;
 
   console.log(`Manually scoring Round ${round} (${raceId})...`);
 
@@ -51,7 +54,7 @@ Example:
     }
 
     // Upsert the race result
-    const result = await prisma.raceResult.upsert({
+    await prisma.raceResult.upsert({
       where: { raceId },
       update: {
         actualP1,
@@ -86,6 +89,7 @@ Example:
     });
 
     console.log(`Scoring ${predictions.length} predictions...`);
+    const seasonContext = await getCurrentSeasonContext(race.name);
 
     for (const pred of predictions) {
       const { points, breakdown } = calculateScore(
@@ -118,12 +122,14 @@ Example:
             prediction: pred,
             result: { actualP1, actualP2, actualP3, actualFastestLap, actualDNFs },
             points,
+            seasonContext,
           }),
           getRaceRoast({
             raceName: race.name,
             prediction: pred,
             result: { actualP1, actualP2, actualP3, actualFastestLap, actualDNFs },
             points,
+            seasonContext,
           }),
         ]);
         aiRecap = recap;
@@ -141,7 +147,7 @@ Example:
         },
         update: {
           points,
-          breakdown: breakdown as any,
+          breakdown: breakdown as unknown as Prisma.InputJsonValue,
           aiRecap,
           aiRoast,
         },
@@ -149,7 +155,7 @@ Example:
           userId: pred.userId,
           raceId,
           points,
-          breakdown: breakdown as any,
+          breakdown: breakdown as unknown as Prisma.InputJsonValue,
           aiRecap,
           aiRoast,
         },

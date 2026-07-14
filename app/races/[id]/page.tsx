@@ -3,9 +3,11 @@ import { syncUser } from "@/lib/user";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getDriverName, getDriverCode } from "@/lib/drivers";
+import type { ScoreBreakdown } from "@/lib/scoring";
 import PredictionForm from "@/components/PredictionForm";
 import RaceCountdown from "@/components/RaceCountdown";
 import { getRaceImageUrl } from "@/lib/race-images";
+import { syncCurrentSeasonCalendar } from "@/lib/f1-data";
 import {
   Clock,
   MapPin,
@@ -27,6 +29,7 @@ interface RaceDetailPageProps {
 
 export default async function RaceDetailPage({ params }: RaceDetailPageProps) {
   const { id: raceId } = await params;
+  await syncCurrentSeasonCalendar();
   const now = new Date();
 
   // Fetch the race and results
@@ -113,6 +116,7 @@ export default async function RaceDetailPage({ params }: RaceDetailPageProps) {
       },
     },
   });
+  const scoreBreakdown = userScore?.breakdown as ScoreBreakdown | undefined;
 
   return (
     <div className="mx-auto w-full max-w-5xl px-6 py-12 flex-1 flex flex-col animate-fade-in">
@@ -129,7 +133,7 @@ export default async function RaceDetailPage({ params }: RaceDetailPageProps) {
         {/* Background photo */}
         <div className="absolute inset-0">
           <img
-            src={getRaceImageUrl(race.name)}
+            src={getRaceImageUrl(race.name, race.circuit)}
             alt=""
             className="w-full h-full object-cover"
           />
@@ -295,7 +299,7 @@ export default async function RaceDetailPage({ params }: RaceDetailPageProps) {
                         <span className="inline-flex items-center gap-1 text-[10px] font-extrabold text-neon-green uppercase bg-emerald-950/40 px-2 py-0.5 rounded mb-3">
                           <Award className="w-3 h-3" /> F1 Analyst Recap
                         </span>
-                        <p className="text-sm leading-relaxed text-zinc-300 font-medium">"{userScore.aiRecap}"</p>
+                        <p className="text-sm leading-relaxed text-zinc-300 font-medium">&quot;{userScore.aiRecap}&quot;</p>
                       </div>
                     </div>
                   )}
@@ -306,7 +310,7 @@ export default async function RaceDetailPage({ params }: RaceDetailPageProps) {
                         <span className="inline-flex items-center gap-1 text-[10px] font-extrabold text-f1-cyan uppercase bg-cyan-950/40 px-2 py-0.5 rounded mb-3">
                           <Flame className="w-3 h-3" /> Post-Race Roast
                         </span>
-                        <p className="text-sm leading-relaxed text-zinc-300 font-medium">"{userScore.aiRoast}"</p>
+                        <p className="text-sm leading-relaxed text-zinc-300 font-medium">&quot;{userScore.aiRoast}&quot;</p>
                       </div>
                     </div>
                   )}
@@ -338,23 +342,23 @@ export default async function RaceDetailPage({ params }: RaceDetailPageProps) {
               <div className="space-y-3.5 text-xs">
                 <div className="flex items-center justify-between text-zinc-400">
                   <span>P1 Prediction:</span>
-                  <span className="font-bold text-white">{(userScore.breakdown as any).p1Points} pts</span>
+                  <span className="font-bold text-white">{scoreBreakdown?.p1Points ?? 0} pts</span>
                 </div>
                 <div className="flex items-center justify-between text-zinc-400">
                   <span>P2 Prediction:</span>
-                  <span className="font-bold text-white">{(userScore.breakdown as any).p2Points} pts</span>
+                  <span className="font-bold text-white">{scoreBreakdown?.p2Points ?? 0} pts</span>
                 </div>
                 <div className="flex items-center justify-between text-zinc-400">
                   <span>P3 Prediction:</span>
-                  <span className="font-bold text-white">{(userScore.breakdown as any).p3Points} pts</span>
+                  <span className="font-bold text-white">{scoreBreakdown?.p3Points ?? 0} pts</span>
                 </div>
                 <div className="flex items-center justify-between text-zinc-400">
                   <span>Fastest Lap:</span>
-                  <span className="font-bold text-white">{(userScore.breakdown as any).fastestLapPoints} pts</span>
+                  <span className="font-bold text-white">{scoreBreakdown?.fastestLapPoints ?? 0} pts</span>
                 </div>
                 <div className="flex items-center justify-between text-zinc-400">
                   <span>DNF Pick:</span>
-                  <span className="font-bold text-white">{(userScore.breakdown as any).dnfPoints} pts</span>
+                  <span className="font-bold text-white">{scoreBreakdown?.dnfPoints ?? 0} pts</span>
                 </div>
               </div>
             </div>
@@ -369,7 +373,7 @@ export default async function RaceDetailPage({ params }: RaceDetailPageProps) {
             {!isLocked ? (
               <div className="py-4 text-center">
                 <p className="text-xs text-zinc-500 font-medium leading-relaxed">
-                  Other players' predictions are hidden until qualifying starts to prevent copying.
+                  Other players&apos; predictions are hidden until qualifying starts to prevent copying.
                 </p>
               </div>
             ) : allScoresForRace.length > 0 ? (

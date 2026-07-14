@@ -6,10 +6,12 @@ import RaceCountdown from "@/components/RaceCountdown";
 import { auth, SignInButton, SignUpButton, Show } from "@clerk/nextjs";
 import { getRaceImageUrl } from "@/lib/race-images";
 import { getDriverName } from "@/lib/drivers";
+import { syncCurrentSeasonCalendar } from "@/lib/f1-data";
 
 export const revalidate = 0;
 
 export default async function Home() {
+  await syncCurrentSeasonCalendar();
   const user = await syncUser();
   const now = new Date();
 
@@ -34,7 +36,7 @@ export default async function Home() {
     },
   });
 
-  let userStats = {
+  const userStats = {
     totalPoints: 0,
     predictionCount: 0,
     arenasCount: 0,
@@ -133,7 +135,7 @@ export default async function Home() {
               {/* Background photo */}
               <div className="absolute inset-0">
                 <img
-                  src={getRaceImageUrl(upcomingRace.name)}
+                  src={getRaceImageUrl(upcomingRace.name, upcomingRace.circuit)}
                   alt=""
                   className="w-full h-full object-cover"
                 />

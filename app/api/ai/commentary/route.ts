@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getConfidenceCommentary } from "@/lib/nim";
+import { getCurrentSeasonContext } from "@/lib/f1-data";
 
 export async function POST(request: Request) {
   try {
@@ -10,6 +11,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
+    const seasonContext = await getCurrentSeasonContext(raceName);
     const commentary = await getConfidenceCommentary({
       raceName,
       p1,
@@ -17,6 +19,7 @@ export async function POST(request: Request) {
       p3,
       fastestLap,
       dnf,
+      seasonContext,
     });
 
     if (!commentary) {
@@ -27,9 +30,9 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json({ success: true, commentary });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("AI Commentary API error:", error);
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+    const message = error instanceof Error ? error.message : "Unable to generate commentary";
+    return NextResponse.json({ success: false, error: message }, { status: 500 });
   }
 }
-

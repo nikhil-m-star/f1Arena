@@ -3,10 +3,12 @@ import Link from "next/link";
 import { Clock, ChevronRight } from "lucide-react";
 import RaceCountdown from "@/components/RaceCountdown";
 import { getRaceImageUrl } from "@/lib/race-images";
+import { syncCurrentSeasonCalendar } from "@/lib/f1-data";
 
 export const revalidate = 0;
 
 export default async function CalendarPage() {
+  await syncCurrentSeasonCalendar();
   const now = new Date();
 
   const races = await db.race.findMany({
@@ -30,7 +32,7 @@ export default async function CalendarPage() {
           {/* Background photo */}
           <div className="absolute inset-0">
             <img
-              src={getRaceImageUrl(upcomingRace.name)}
+              src={getRaceImageUrl(upcomingRace.name, upcomingRace.circuit)}
               alt=""
               className="w-full h-full object-cover"
             />
@@ -82,7 +84,7 @@ export default async function CalendarPage() {
               {/* Background image */}
               <div className="absolute inset-0">
                 <img
-                  src={getRaceImageUrl(race.name)}
+                  src={getRaceImageUrl(race.name, race.circuit)}
                   alt=""
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
