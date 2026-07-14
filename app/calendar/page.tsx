@@ -22,26 +22,25 @@ export default async function CalendarPage() {
   const upcomingRace = races.find(r => new Date(r.qualiDateTime) > now);
 
   return (
-    <div className="mx-auto w-full max-w-5xl px-6 py-12 flex-1 flex flex-col">
+    <div className="mx-auto w-full max-w-5xl px-6 py-12 flex-1 flex flex-col animate-fade-in">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-black italic uppercase text-white">F1 2026 Season Calendar</h1>
-          <p className="text-sm text-zinc-400 mt-1">Submit your predictions before the qualifying session starts for each round.</p>
+          <h1 className="text-4xl font-black uppercase text-white">Calendar</h1>
         </div>
       </div>
 
       {/* Countdown Card for Upcoming Race */}
       {upcomingRace && (
-        <div className="glass-card rounded-xl p-6 mb-10 relative overflow-hidden">
+        <div className="glass-card rounded-2xl p-8 mb-10 relative overflow-hidden">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div>
-              <span className="inline-flex items-center gap-1 text-[10px] font-bold text-f1-cyan uppercase tracking-widest bg-cyan-950/40 px-2 py-0.5 rounded">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-cyan-950/40 px-3 py-1 text-xs font-bold text-f1-cyan mb-4">
                 Next Prediction Deadline
               </span>
-              <h2 className="text-2xl font-black italic uppercase text-white mt-2">
+              <h2 className="text-3xl font-black uppercase text-white mt-2">
                 Round {upcomingRace.round}: {upcomingRace.name}
               </h2>
-              <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-zinc-400 mt-1.5 font-medium">
+              <div className="flex flex-wrap gap-x-4 gap-y-1.5 text-xs text-zinc-400 mt-2 font-medium">
                 <span className="flex items-center gap-1">
                   <MapPin className="w-3.5 h-3.5 text-zinc-500" /> {upcomingRace.circuit}
                 </span>
@@ -58,7 +57,7 @@ export default async function CalendarPage() {
               <RaceCountdown qualiDateTime={upcomingRace.qualiDateTime.toISOString()} />
               <Link
                 href={`/races/${upcomingRace.id}`}
-                className="mt-3 w-full btn-f1 text-center py-1.5 rounded text-xs font-bold block cursor-pointer"
+                className="mt-3 w-full btn-f1 text-center py-2 rounded text-xs font-bold block cursor-pointer"
               >
                 Submit Prediction
               </Link>
@@ -68,7 +67,7 @@ export default async function CalendarPage() {
       )}
 
       {/* Races Grid */}
-      <h3 className="text-lg font-bold text-white mb-4 uppercase tracking-wider italic">Season Rounds</h3>
+      <h3 className="text-xl font-bold text-white mb-6 uppercase tracking-wider">Rounds</h3>
       
       <div className="grid gap-4 sm:grid-cols-2">
         {races.map((race) => {
@@ -79,7 +78,7 @@ export default async function CalendarPage() {
           return (
             <div
               key={race.id}
-              className={`glass-card rounded-xl p-5 flex flex-col justify-between transition relative overflow-hidden ${
+              className={`glass-card rounded-xl p-6 flex flex-col justify-between transition relative overflow-hidden ${
                 isLocked ? "opacity-75 bg-zinc-900/20" : ""
               }`}
             >
@@ -97,7 +96,7 @@ export default async function CalendarPage() {
                   )}
                 </div>
 
-                <h4 className="text-lg font-bold text-white uppercase italic truncate">
+                <h4 className="text-lg font-bold text-white uppercase truncate">
                   {race.name}
                 </h4>
                 <p className="text-xs text-zinc-500 font-semibold truncate mt-0.5">

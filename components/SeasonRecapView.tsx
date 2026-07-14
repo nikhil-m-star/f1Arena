@@ -60,7 +60,7 @@ export default function SeasonRecapView({ history }: SeasonRecapViewProps) {
       {/* Mode selection card */}
       <div className="glass-card p-5 rounded-xl flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="space-y-1">
-          <h3 className="text-sm font-bold text-white uppercase italic">Select AI Recap Mode</h3>
+          <h3 className="text-sm font-bold text-white uppercase">Select AI Recap Mode</h3>
           <p className="text-xs text-zinc-500 font-medium max-w-sm">
             Choose whether to get a detailed performance analysis or a savage, lighthearted roast.
           </p>
@@ -125,7 +125,7 @@ export default function SeasonRecapView({ history }: SeasonRecapViewProps) {
           {/* Top colored indicator bar */}
           <div className="absolute top-0 left-0 h-1 w-full bg-f1-cyan" />
 
-          <h3 className="text-base font-extrabold uppercase italic mb-4 flex items-center gap-1.5 text-f1-cyan">
+          <h3 className="text-base font-extrabold uppercase mb-4 flex items-center gap-1.5 text-f1-cyan">
             {mode === "analyzer" ? (
               <>
                 <BarChart3 className="w-4 h-4" /> Season Telemetry Analysis

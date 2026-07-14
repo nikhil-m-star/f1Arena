@@ -56,11 +56,11 @@ export default async function ArenaDetailPage({ params }: ArenaDetailPageProps) 
   const isMember = league.memberships.some((m) => m.userId === user.id);
   if (!isMember) {
     return (
-      <div className="mx-auto w-full max-w-md px-6 py-20 flex-1 flex flex-col items-center justify-center text-center">
-        <Shield className="w-12 h-12 text-red-500 mb-4 animate-bounce" />
-        <h1 className="text-2xl font-black italic uppercase text-white">Access Denied</h1>
+      <div className="mx-auto w-full max-w-md px-6 py-20 flex-1 flex flex-col items-center justify-center text-center animate-fade-in">
+        <Shield className="w-12 h-12 text-red-500 mb-4" />
+        <h1 className="text-3xl font-black uppercase text-white">Access Denied</h1>
         <p className="text-sm text-zinc-400 mt-2">
-          You are not a member of this Arena. Please request the invite code from the owner to join.
+          You are not a member of this Arena.
         </p>
         <Link href="/arenas" className="btn-f1 mt-6 px-5 py-2 text-xs rounded cursor-pointer">
           Back to Your Arenas
@@ -102,7 +102,7 @@ export default async function ArenaDetailPage({ params }: ArenaDetailPageProps) 
   }
 
   return (
-    <div className="mx-auto w-full max-w-5xl px-6 py-12 flex-1 flex flex-col">
+    <div className="mx-auto w-full max-w-5xl px-6 py-12 flex-1 flex flex-col animate-fade-in">
       {/* Back button */}
       <Link
         href="/arenas"
@@ -112,7 +112,7 @@ export default async function ArenaDetailPage({ params }: ArenaDetailPageProps) 
       </Link>
 
       {/* Header card */}
-      <div className="glass-card rounded-xl p-6 mb-8 relative overflow-hidden">
+      <div className="glass-card rounded-2xl p-8 mb-8 relative overflow-hidden">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
             <div className="flex items-center gap-2">
@@ -120,7 +120,7 @@ export default async function ArenaDetailPage({ params }: ArenaDetailPageProps) 
                 Arena League
               </span>
             </div>
-            <h1 className="text-3xl font-black italic uppercase text-white mt-3">{league.name}</h1>
+            <h1 className="text-4xl font-black uppercase text-white mt-3">{league.name}</h1>
             <p className="text-xs text-zinc-400 mt-1 font-semibold">
               Owner: {league.owner.name} &bull; Created {new Date(league.createdAt).toLocaleDateString()}
             </p>
@@ -134,7 +134,7 @@ export default async function ArenaDetailPage({ params }: ArenaDetailPageProps) 
       <div className="grid gap-8 md:grid-cols-3">
         {/* Standings table */}
         <div className="md:col-span-2 space-y-6">
-          <h2 className="text-lg font-bold text-white uppercase tracking-wider italic">Arena Standings</h2>
+          <h2 className="text-xl font-bold text-white uppercase tracking-wider">Standings</h2>
 
           <div className="glass-card rounded-xl overflow-hidden">
             {/* Standings header */}

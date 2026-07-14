@@ -257,7 +257,7 @@ export default function PredictionForm({
       {/* Joker selection card */}
       <div className="glass-card p-4 rounded-xl flex items-center justify-between gap-4">
         <div className="space-y-1">
-          <label className="font-extrabold text-white text-sm uppercase italic flex items-center gap-1.5">
+          <label className="font-extrabold text-white text-sm uppercase flex items-center gap-1.5">
             Play Joker Card
           </label>
           <p className="text-xs text-zinc-500 max-w-md font-medium">
@@ -295,7 +295,7 @@ export default function PredictionForm({
         </div>
 
         {commentary && (
-          <div className="p-4 rounded bg-cyan-950/20 text-f1-cyan text-sm italic font-medium leading-relaxed shadow-sm relative overflow-hidden">
+          <div className="p-4 rounded bg-cyan-950/20 text-f1-cyan text-sm font-medium leading-relaxed shadow-sm relative overflow-hidden">
             <div className="absolute top-0 left-0 w-1 bg-f1-cyan h-full"></div>
             "{commentary}"
           </div>

@@ -12,11 +12,11 @@ export default async function ArenasPage() {
 
   if (!user) {
     return (
-      <div className="mx-auto w-full max-w-md px-6 py-20 flex-1 flex flex-col items-center justify-center text-center">
-        <Users className="w-12 h-12 text-zinc-600 mb-4 animate-pulse" />
-        <h1 className="text-2xl font-black italic uppercase text-white">Join the Arena</h1>
+      <div className="mx-auto w-full max-w-md px-6 py-20 flex-1 flex flex-col items-center justify-center text-center animate-fade-in">
+        <Users className="w-12 h-12 text-zinc-650 mb-4" />
+        <h1 className="text-3xl font-black uppercase text-white">Join the Arena</h1>
         <p className="text-sm text-zinc-400 mt-2">
-          Create or join private prediction leagues ("Arenas") to compete directly with your friends. Sign in to start.
+          Sign in to create or join private prediction leagues.
         </p>
       </div>
     );
@@ -64,16 +64,13 @@ export default async function ArenasPage() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-5xl px-6 py-12 flex-1 grid gap-8 md:grid-cols-3">
+    <div className="mx-auto w-full max-w-5xl px-6 py-12 flex-1 grid gap-8 md:grid-cols-3 animate-fade-in">
       {/* Left 2 Columns: Leagues list */}
       <div className="md:col-span-2 space-y-6">
         <div>
-          <h1 className="text-3xl font-black italic uppercase text-white">
-            Your Arenas
+          <h1 className="text-4xl font-black uppercase text-white">
+            Arenas
           </h1>
-          <p className="text-sm text-zinc-400 mt-1">
-            Private groups where you compete only with friends.
-          </p>
         </div>
 
         {memberships.length > 0 ? (
@@ -81,7 +78,7 @@ export default async function ArenasPage() {
             {memberships.map(({ league }) => (
               <div
                 key={league.id}
-                className="glass-card rounded-xl p-5 flex flex-col justify-between"
+                className="glass-card rounded-2xl p-6 flex flex-col justify-between"
               >
                 <div>
                   <div className="flex items-center justify-between gap-2 mb-2">
@@ -94,7 +91,7 @@ export default async function ArenasPage() {
                       </span>
                     )}
                   </div>
-                  <h3 className="text-lg font-black text-white uppercase italic truncate">
+                  <h3 className="text-xl font-black text-white uppercase truncate">
                     {league.name}
                   </h3>
                   <p className="text-xs text-zinc-500 font-semibold truncate mt-1">
@@ -130,8 +127,8 @@ export default async function ArenasPage() {
       {/* Right Column: Create / Join actions */}
       <div className="space-y-6">
         {/* Create Arena card */}
-        <div className="glass-card rounded-xl p-6">
-          <h2 className="text-base font-bold uppercase italic text-white mb-4 flex items-center gap-1.5">
+        <div className="glass-card rounded-2xl p-8">
+          <h2 className="text-lg font-extrabold uppercase text-white mb-4 flex items-center gap-1.5">
             <Plus className="w-4 h-4 text-f1-cyan" /> Create New Arena
           </h2>
           <form action={handleCreate} className="space-y-4">
@@ -157,8 +154,8 @@ export default async function ArenasPage() {
         </div>
 
         {/* Join Arena card */}
-        <div className="glass-card rounded-xl p-6">
-          <h2 className="text-base font-bold uppercase italic text-white mb-4 flex items-center gap-1.5">
+        <div className="glass-card rounded-2xl p-8">
+          <h2 className="text-lg font-extrabold uppercase text-white mb-4 flex items-center gap-1.5">
             <LogIn className="w-4 h-4 text-f1-cyan" /> Join Friend's Arena
           </h2>
           <form action={handleJoin} className="space-y-4">

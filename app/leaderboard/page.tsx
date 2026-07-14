@@ -34,15 +34,12 @@ export default async function GlobalLeaderboardPage() {
     .sort((a, b) => b.totalPoints - a.totalPoints);
 
   return (
-    <div className="mx-auto w-full max-w-4xl px-6 py-12 flex-1 flex flex-col">
+    <div className="mx-auto w-full max-w-4xl px-6 py-12 flex-1 flex flex-col animate-fade-in">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-black italic uppercase text-white">
-            Global Leaderboard
+          <h1 className="text-4xl font-black uppercase text-white">
+            Leaderboard
           </h1>
-          <p className="text-sm text-zinc-400 mt-1">
-            Season 2026 overall standings. Rank is calculated across all predictions submitted.
-          </p>
         </div>
       </div>
 

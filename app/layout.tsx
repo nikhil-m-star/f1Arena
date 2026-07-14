@@ -35,7 +35,7 @@ export default function RootLayout({
           <header className="sticky top-0 z-50 flex h-16 items-center justify-between bg-zinc-950/80 px-6 backdrop-blur-md">
             <div className="flex items-center gap-8">
               <Link href="/" className="flex items-center font-black tracking-wider text-xl text-white">
-                <span className="bg-f1-cyan px-2 py-0.5 rounded italic text-zinc-950 font-extrabold mr-1">F1</span>
+                <span className="bg-f1-cyan px-2 py-0.5 rounded text-zinc-950 font-extrabold mr-1">F1</span>
                 <span className="font-extrabold">ARENA</span>
               </Link>
               <nav className="hidden md:flex items-center gap-6 text-sm font-semibold text-zinc-400">

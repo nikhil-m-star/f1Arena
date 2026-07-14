@@ -63,18 +63,18 @@ export default async function ProfilePage() {
   }));
 
   return (
-    <div className="mx-auto w-full max-w-4xl px-6 py-12 flex-1 flex flex-col space-y-8">
+    <div className="mx-auto w-full max-w-4xl px-6 py-12 flex-1 flex flex-col space-y-8 animate-fade-in">
       {/* Profile summary card */}
-      <div className="glass-card rounded-xl p-6 relative overflow-hidden">
+      <div className="glass-card rounded-2xl p-8 relative overflow-hidden">
         <div className="absolute top-0 right-0 h-1 bg-f1-cyan w-full"></div>
 
         <div className="flex flex-col sm:flex-row items-center gap-6">
-          <div className="h-16 w-16 rounded-full bg-zinc-900 flex items-center justify-center text-white text-xl font-black italic">
+          <div className="h-16 w-16 rounded-full bg-zinc-900 flex items-center justify-center text-white text-xl font-black">
             {user.name.slice(0, 2).toUpperCase()}
           </div>
 
           <div className="text-center sm:text-left space-y-1">
-            <h1 className="text-2xl font-black italic uppercase text-white tracking-wide">
+            <h1 className="text-3xl font-black uppercase text-white tracking-wide">
               {user.name}
             </h1>
             <div className="flex flex-col sm:flex-row sm:items-center gap-x-4 gap-y-1 text-xs text-zinc-400 font-medium">
@@ -105,7 +105,7 @@ export default async function ProfilePage() {
         </div>
         <div className="glass-card p-5 rounded-xl text-center">
           <span className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider block">Joker Card Used</span>
-          <span className="text-xs font-black text-white mt-2.5 block truncate max-w-full px-1 uppercase italic">
+          <span className="text-xs font-black text-white mt-2.5 block truncate max-w-full px-1 uppercase">
             {jokerPrediction ? jokerPrediction.race.name : "Available"}
           </span>
         </div>
@@ -114,12 +114,9 @@ export default async function ProfilePage() {
       {/* AI Season recap section */}
       <div className="space-y-4">
         <div>
-          <h2 className="text-xl font-bold uppercase italic text-white flex items-center gap-2">
+          <h2 className="text-2xl font-bold uppercase text-white flex items-center gap-2">
             AI Season Telemetry Analysis & Roast
           </h2>
-          <p className="text-xs text-zinc-400 mt-1">
-            Get personalized insights or a friendly roast of your prediction performance history using NVIDIA NIM Llama 3.3.
-          </p>
         </div>
 
         <SeasonRecapView history={history} />

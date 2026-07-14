@@ -114,7 +114,7 @@ export default async function RaceDetailPage({ params }: RaceDetailPageProps) {
   });
 
   return (
-    <div className="mx-auto w-full max-w-5xl px-6 py-12 flex-1 flex flex-col">
+    <div className="mx-auto w-full max-w-5xl px-6 py-12 flex-1 flex flex-col animate-fade-in">
       {/* Back button */}
       <Link
         href="/calendar"
@@ -124,7 +124,7 @@ export default async function RaceDetailPage({ params }: RaceDetailPageProps) {
       </Link>
 
       {/* Hero Header */}
-      <div className="glass-card rounded-xl p-6 mb-8 relative overflow-hidden">
+      <div className="glass-card rounded-2xl p-8 mb-8 relative overflow-hidden">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
             <div className="flex items-center gap-2">
@@ -141,7 +141,7 @@ export default async function RaceDetailPage({ params }: RaceDetailPageProps) {
                 </span>
               )}
             </div>
-            <h1 className="text-3xl font-black italic uppercase text-white mt-3">{race.name}</h1>
+            <h1 className="text-4xl font-black uppercase text-white mt-3">{race.name}</h1>
             <div className="flex flex-wrap gap-x-4 gap-y-1.5 text-xs text-zinc-400 mt-2 font-medium">
               <span className="flex items-center gap-1">
                 <MapPin className="w-4 h-4 text-zinc-500" /> {race.circuit}
@@ -168,9 +168,9 @@ export default async function RaceDetailPage({ params }: RaceDetailPageProps) {
         <div className="md:col-span-2 space-y-8">
           {/* Prediction Form Section */}
           {!isLocked ? (
-            <div className="glass-card rounded-xl p-6">
-              <h2 className="text-xl font-bold uppercase italic text-white mb-6 pb-3 flex items-center gap-2">
-                Your Race Predictions
+            <div className="glass-card rounded-2xl p-8">
+              <h2 className="text-2xl font-extrabold uppercase text-white mb-6 flex items-center gap-2">
+                Your Predictions
               </h2>
               {dbUser ? (
                 <PredictionForm
@@ -189,9 +189,9 @@ export default async function RaceDetailPage({ params }: RaceDetailPageProps) {
             /* locked layout */
             <div className="space-y-8">
               {/* User prediction recap vs Actual Results */}
-              <div className="glass-card rounded-xl p-6">
-                <h2 className="text-xl font-bold uppercase italic text-white mb-6 pb-3 flex items-center gap-2">
-                  Race Results & Predictions
+              <div className="glass-card rounded-2xl p-8">
+                <h2 className="text-2xl font-extrabold uppercase text-white mb-6 flex items-center gap-2">
+                  Results & Predictions
                 </h2>
 
                 {race.result ? (
@@ -242,7 +242,7 @@ export default async function RaceDetailPage({ params }: RaceDetailPageProps) {
                 {/* Show user prediction vs results side-by-side */}
                 {userPrediction && (
                   <div className="mt-8 pt-6">
-                    <h3 className="text-sm font-extrabold uppercase italic text-zinc-400 mb-4">
+                    <h3 className="text-sm font-extrabold uppercase text-zinc-400 mb-4">
                       Your Predictions
                     </h3>
                     <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -284,7 +284,7 @@ export default async function RaceDetailPage({ params }: RaceDetailPageProps) {
                         <span className="inline-flex items-center gap-1 text-[10px] font-extrabold text-neon-green uppercase bg-emerald-950/40 px-2 py-0.5 rounded mb-3">
                           <Award className="w-3 h-3" /> F1 Analyst Recap
                         </span>
-                        <p className="text-sm italic leading-relaxed text-zinc-300 font-medium">"{userScore.aiRecap}"</p>
+                        <p className="text-sm leading-relaxed text-zinc-300 font-medium">"{userScore.aiRecap}"</p>
                       </div>
                     </div>
                   )}
@@ -295,7 +295,7 @@ export default async function RaceDetailPage({ params }: RaceDetailPageProps) {
                         <span className="inline-flex items-center gap-1 text-[10px] font-extrabold text-f1-cyan uppercase bg-cyan-950/40 px-2 py-0.5 rounded mb-3">
                           <Flame className="w-3 h-3" /> Post-Race Roast
                         </span>
-                        <p className="text-sm italic leading-relaxed text-zinc-300 font-medium">"{userScore.aiRoast}"</p>
+                        <p className="text-sm leading-relaxed text-zinc-300 font-medium">"{userScore.aiRoast}"</p>
                       </div>
                     </div>
                   )}
