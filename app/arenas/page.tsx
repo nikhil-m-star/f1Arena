@@ -173,7 +173,7 @@ export default async function ArenasPage() {
             </div>
             <button
               type="submit"
-              className="w-full bg-zinc-800 hover:bg-zinc-700 transition text-zinc-205 py-2 text-xs rounded font-bold cursor-pointer"
+              className="w-full bg-zinc-800 hover:bg-zinc-700 transition text-zinc-200 py-2 text-xs rounded font-bold cursor-pointer"
             >
               Enter Arena
             </button>

@@ -19,9 +19,17 @@ export async function POST(request: Request) {
       dnf,
     });
 
+    if (!commentary) {
+      return NextResponse.json({
+        success: true,
+        commentary: "AI Coach is currently unavailable. Your predictions look solid though — lock them in!",
+      });
+    }
+
     return NextResponse.json({ success: true, commentary });
   } catch (error: any) {
     console.error("AI Commentary API error:", error);
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }
+

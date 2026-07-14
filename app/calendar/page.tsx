@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
 import Link from "next/link";
-import { Clock, Lock, Unlock, MapPin, Calendar as CalendarIcon, ChevronRight } from "lucide-react";
+import { Clock, ChevronRight } from "lucide-react";
 import RaceCountdown from "@/components/RaceCountdown";
 import { getRaceImageUrl } from "@/lib/race-images";
 
@@ -9,7 +9,6 @@ export const revalidate = 0;
 export default async function CalendarPage() {
   const now = new Date();
 
-  // Fetch all races
   const races = await db.race.findMany({
     orderBy: {
       round: "asc",
@@ -19,46 +18,46 @@ export default async function CalendarPage() {
     },
   });
 
-  // Find next upcoming race
   const upcomingRace = races.find(r => new Date(r.qualiDateTime) > now);
 
   return (
     <div className="mx-auto w-full max-w-5xl px-6 py-12 flex-1 flex flex-col animate-fade-in">
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
-        <div>
-          <h1 className="text-4xl font-black uppercase text-white">Calendar</h1>
-        </div>
-      </div>
+      <h1 className="text-4xl font-black uppercase text-white mb-10">Calendar</h1>
 
-      {/* Countdown Card for Upcoming Race */}
+      {/* Countdown for next race */}
       {upcomingRace && (
-        <div className="glass-card rounded-2xl p-8 mb-10 relative overflow-hidden">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div className="mb-12 relative rounded-2xl overflow-hidden">
+          {/* Background photo */}
+          <div className="absolute inset-0">
+            <img
+              src={getRaceImageUrl(upcomingRace.name)}
+              alt=""
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-zinc-950 via-zinc-950/85 to-zinc-950/40"></div>
+          </div>
+
+          <div className="relative p-8 sm:p-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div>
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-cyan-950/40 px-3 py-1 text-xs font-bold text-f1-cyan mb-4">
-                Next Prediction Deadline
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-cyan-500/10 px-3 py-1 text-xs font-bold text-f1-cyan mb-4">
+                Next Race
               </span>
-              <h2 className="text-3xl font-black uppercase text-white mt-2">
-                Round {upcomingRace.round}: {upcomingRace.name}
+              <h2 className="text-3xl font-black uppercase text-white mt-1">
+                Round {upcomingRace.round} — {upcomingRace.name}
               </h2>
-              <div className="flex flex-wrap gap-x-4 gap-y-1.5 text-xs text-zinc-400 mt-2 font-medium">
-                <span className="flex items-center gap-1">
-                  <MapPin className="w-3.5 h-3.5 text-zinc-500" /> {upcomingRace.circuit}
-                </span>
-                <span className="flex items-center gap-1">
-                  <CalendarIcon className="w-3.5 h-3.5 text-zinc-500" /> Quali: {new Date(upcomingRace.qualiDateTime).toLocaleDateString(undefined, { weekday: 'long', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
-                </span>
-              </div>
+              <p className="text-sm text-zinc-400 font-medium mt-1">{upcomingRace.circuit}</p>
             </div>
 
-            <div className="flex flex-col items-start md:items-end gap-1.5 bg-zinc-900/40 p-4 rounded min-w-[200px]">
-              <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider flex items-center gap-1">
-                <Clock className="w-3 h-3 text-f1-cyan" /> Submissions Close In
-              </span>
-              <RaceCountdown qualiDateTime={upcomingRace.qualiDateTime.toISOString()} />
+            <div className="flex flex-col items-start md:items-end gap-3">
+              <div className="flex flex-col items-start md:items-end gap-1">
+                <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider flex items-center gap-1">
+                  <Clock className="w-3 h-3 text-f1-cyan" /> Closes In
+                </span>
+                <RaceCountdown qualiDateTime={upcomingRace.qualiDateTime.toISOString()} />
+              </div>
               <Link
                 href={`/races/${upcomingRace.id}`}
-                className="mt-3 w-full btn-f1 text-center py-2 rounded text-xs font-bold block cursor-pointer"
+                className="btn-f1 text-center py-2.5 px-6 rounded-lg text-xs font-bold cursor-pointer"
               >
                 Submit Prediction
               </Link>
@@ -67,106 +66,76 @@ export default async function CalendarPage() {
         </div>
       )}
 
-      {/* Races Grid */}
-      <h3 className="text-xl font-bold text-white mb-6 uppercase tracking-wider">Rounds</h3>
-      
-      <div className="grid gap-4 sm:grid-cols-2">
+      {/* Race Cards — one per row, premium minimal */}
+      <div className="flex flex-col gap-3">
         {races.map((race) => {
           const isQualiPassed = new Date(race.qualiDateTime) <= now;
           const isLocked = race.locked || isQualiPassed;
           const hasResult = race.result !== null;
 
           return (
-            <div
+            <Link
               key={race.id}
-              className={`glass-card rounded-xl p-6 flex flex-col justify-between transition relative overflow-hidden ${
-                isLocked ? "opacity-75 bg-zinc-900/20" : ""
-              }`}
+              href={`/races/${race.id}`}
+              className="group relative rounded-xl overflow-hidden transition-all duration-300 hover:scale-[1.01] hover:shadow-2xl cursor-pointer"
             >
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-bold text-zinc-500">ROUND {race.round}</span>
-                  {isLocked ? (
-                    <span className="inline-flex items-center gap-1 rounded bg-zinc-800/80 px-2 py-0.5 text-[10px] font-bold text-zinc-400">
-                      <Lock className="w-2.5 h-2.5 text-zinc-500" /> LOCKED
-                    </span>
-                  ) : (
-                    <span className="inline-flex items-center gap-1 rounded bg-emerald-950/40 px-2 py-0.5 text-[10px] font-bold text-emerald-500">
-                      <Unlock className="w-2.5 h-2.5 text-emerald-500" /> OPEN
-                    </span>
-                  )}
-                </div>
+              {/* Background image */}
+              <div className="absolute inset-0">
+                <img
+                  src={getRaceImageUrl(race.name)}
+                  alt=""
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-zinc-950 via-zinc-950/90 to-zinc-950/50"></div>
+              </div>
 
-                <div className="flex items-center justify-between gap-4 mt-2">
-                  <div className="flex-1 min-w-0">
-                    <h4 className="text-lg font-bold text-white uppercase truncate">
+              {/* Content */}
+              <div className="relative flex items-center justify-between gap-4 px-6 py-5 sm:px-8 sm:py-6">
+                {/* Left: round + name */}
+                <div className="flex items-center gap-5 min-w-0">
+                  <span className="text-2xl font-black text-zinc-600 tabular-nums w-8 text-right flex-shrink-0">
+                    {String(race.round).padStart(2, "0")}
+                  </span>
+                  <div className="min-w-0">
+                    <h3 className="text-lg font-bold text-white uppercase truncate group-hover:text-f1-cyan transition-colors duration-200">
                       {race.name}
-                    </h4>
-                    <p className="text-xs text-zinc-550 font-semibold truncate mt-0.5">
+                    </h3>
+                    <p className="text-xs text-zinc-500 font-medium truncate mt-0.5">
                       {race.circuit}
                     </p>
                   </div>
-                  <div className="flex-shrink-0 bg-zinc-900/30 p-2 rounded-lg flex items-center justify-center h-14 w-20">
-                    <img
-                      src={getRaceImageUrl(race.name)}
-                      alt="Track map"
-                      className="h-full w-auto object-contain filter invert opacity-90"
-                    />
-                  </div>
                 </div>
 
-                <div className="mt-4 space-y-1.5 text-xs text-zinc-400">
-                  <div className="flex items-center gap-1.5">
-                    <Clock className="w-3.5 h-3.5 text-zinc-500" />
-                    <span>
-                      Qualifying:{" "}
-                      <strong>
-                        {new Date(race.qualiDateTime).toLocaleDateString(undefined, {
-                          month: "short",
-                          day: "numeric",
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
-                      </strong>
+                {/* Right: status + date */}
+                <div className="flex items-center gap-5 flex-shrink-0">
+                  <div className="hidden sm:flex flex-col items-end gap-0.5 text-right">
+                    <span className="text-xs text-zinc-400 font-medium">
+                      {new Date(race.raceDateTime).toLocaleDateString(undefined, {
+                        month: "short",
+                        day: "numeric",
+                      })}
+                    </span>
+                    <span className="text-[10px] text-zinc-600 font-medium">
+                      {new Date(race.raceDateTime).toLocaleDateString(undefined, {
+                        weekday: "short",
+                      })}
                     </span>
                   </div>
-                  <div className="flex items-center gap-1.5">
-                    <CalendarIcon className="w-3.5 h-3.5 text-zinc-500" />
-                    <span>
-                      Race:{" "}
-                      <strong>
-                        {new Date(race.raceDateTime).toLocaleDateString(undefined, {
-                          month: "short",
-                          day: "numeric",
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
-                      </strong>
-                    </span>
+
+                  {/* Status indicator */}
+                  <div className="flex items-center gap-2">
+                    {hasResult ? (
+                      <span className="h-2 w-2 rounded-full bg-neon-green shadow-[0_0_6px_var(--neon-green)]"></span>
+                    ) : isLocked ? (
+                      <span className="h-2 w-2 rounded-full bg-zinc-600"></span>
+                    ) : (
+                      <span className="h-2 w-2 rounded-full bg-f1-cyan shadow-[0_0_6px_var(--accent-cyan)] animate-pulse"></span>
+                    )}
+                    <ChevronRight className="w-4 h-4 text-zinc-600 group-hover:text-white transition-colors" />
                   </div>
                 </div>
               </div>
-
-              <div className="mt-6 pt-4 flex items-center justify-between gap-4">
-                <span className="text-[10px] font-bold">
-                  {hasResult ? (
-                    <span className="text-neon-green">RESULTS INGESTED</span>
-                  ) : isLocked ? (
-                    <span className="text-zinc-500">AWAITING RESULTS</span>
-                  ) : (
-                    <span className="text-f1-cyan animate-pulse">PREDICT NOW</span>
-                  )}
-                </span>
-
-                <Link
-                  href={`/races/${race.id}`}
-                  className="text-xs font-bold text-zinc-300 hover:text-white flex items-center gap-0.5 transition"
-                >
-                  {isLocked ? "View Details" : "Enter Predictions"}
-                  <ChevronRight className="w-3.5 h-3.5" />
-                </Link>
-              </div>
-            </div>
+            </Link>
           );
         })}
       </div>

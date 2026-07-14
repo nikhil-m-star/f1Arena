@@ -5,14 +5,14 @@ import { Trophy, Flag, Users, Clock, Sparkles, Shield, ChevronRight } from "luci
 import RaceCountdown from "@/components/RaceCountdown";
 import { auth, SignInButton, SignUpButton, Show } from "@clerk/nextjs";
 import { getRaceImageUrl } from "@/lib/race-images";
+import { getDriverName } from "@/lib/drivers";
 
-export const revalidate = 0; // Disable caching to ensure fresh dashboard state
+export const revalidate = 0;
 
 export default async function Home() {
   const user = await syncUser();
   const now = new Date();
 
-  // Fetch next upcoming race
   const upcomingRace = await db.race.findFirst({
     where: {
       qualiDateTime: { gt: now },
@@ -22,7 +22,6 @@ export default async function Home() {
     },
   });
 
-  // Fetch last completed race
   const lastCompletedRace = await db.race.findFirst({
     where: {
       result: { isNot: null },
@@ -45,7 +44,6 @@ export default async function Home() {
   let userPredictionForUpcoming = null;
 
   if (user) {
-    // Fetch user prediction count & sum of points
     const predictions = await db.prediction.count({
       where: { userId: user.id },
     });
@@ -65,8 +63,6 @@ export default async function Home() {
     userStats.predictionCount = predictions;
     userStats.arenasCount = arenasJoined;
 
-    // Calculate global rank
-    // Group scores by user and sum points, then sort
     const allUserScores = await db.score.groupBy({
       by: ["userId"],
       _sum: {
@@ -84,7 +80,6 @@ export default async function Home() {
     const rankIndex = sortedUsers.findIndex((u) => u.userId === user.id);
     userStats.globalRank = rankIndex !== -1 ? rankIndex + 1 : 1;
 
-    // Check if user already predicted the upcoming race
     if (upcomingRace) {
       userPredictionForUpcoming = await db.prediction.findUnique({
         where: {
@@ -130,62 +125,66 @@ export default async function Home() {
 
       {/* Main Dashboard Section */}
       <section className="mx-auto w-full max-w-5xl px-6 py-8 flex-1 grid gap-8 md:grid-cols-3">
-        {/* Left 2 Columns: Main Race & Calendar Actions */}
+        {/* Left 2 Columns */}
         <div className="md:col-span-2 space-y-8">
-          {/* Upcoming Race Lock Box */}
+          {/* Upcoming Race Card */}
           {upcomingRace ? (
-            <div className="glass-card rounded-2xl p-8 relative overflow-hidden">
-              <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-                <div className="flex-1 space-y-6">
-                  <div>
-                    <span className="text-xs font-bold uppercase tracking-wider text-f1-cyan">Upcoming Round</span>
-                    <h2 className="text-3xl font-black uppercase text-white mt-2">
-                      {upcomingRace.name}
-                    </h2>
-                    <p className="text-sm text-zinc-550 font-bold mt-1">{upcomingRace.circuit}</p>
-                  </div>
-
-                  <div className="flex flex-col items-start gap-1.5">
-                    <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider flex items-center gap-1">
-                      <Clock className="w-3.5 h-3.5 text-f1-cyan" /> Submissions Close
-                    </span>
-                    <RaceCountdown qualiDateTime={upcomingRace.qualiDateTime.toISOString()} />
-                  </div>
-                </div>
-
-                <div className="flex-shrink-0 bg-zinc-900/30 p-4 rounded-xl flex items-center justify-center h-28 w-44">
-                  <img
-                    src={getRaceImageUrl(upcomingRace.name)}
-                    alt="Circuit Map"
-                    className="h-full w-auto object-contain filter invert opacity-90"
-                  />
-                </div>
+            <div className="relative rounded-2xl overflow-hidden">
+              {/* Background photo */}
+              <div className="absolute inset-0">
+                <img
+                  src={getRaceImageUrl(upcomingRace.name)}
+                  alt=""
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-zinc-950 via-zinc-950/85 to-zinc-950/50"></div>
               </div>
 
-              <div className="my-8" />
+              <div className="relative p-8">
+                <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+                  <div className="flex-1 space-y-6">
+                    <div>
+                      <span className="text-xs font-bold uppercase tracking-wider text-f1-cyan">Upcoming Round</span>
+                      <h2 className="text-3xl font-black uppercase text-white mt-2">
+                        {upcomingRace.name}
+                      </h2>
+                      <p className="text-sm text-zinc-400 font-bold mt-1">{upcomingRace.circuit}</p>
+                    </div>
 
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
-                <div className="text-sm text-zinc-400 font-semibold">
-                  {userPredictionForUpcoming ? (
-                    <span className="flex items-center gap-2 text-neon-green">
-                      <span className="h-2 w-2 rounded-full bg-neon-green"></span>
-                      Prediction saved: P1 {userPredictionForUpcoming.predictedP1}
-                    </span>
-                  ) : (
-                    <span className="flex items-center gap-2 text-zinc-400">
-                      <span className="h-2 w-2 rounded-full bg-zinc-650"></span>
-                      No prediction submitted.
-                    </span>
-                  )}
+                    <div className="flex flex-col items-start gap-1.5">
+                      <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider flex items-center gap-1">
+                        <Clock className="w-3.5 h-3.5 text-f1-cyan" /> Submissions Close
+                      </span>
+                      <RaceCountdown qualiDateTime={upcomingRace.qualiDateTime.toISOString()} />
+                    </div>
+                  </div>
                 </div>
 
-                <Link
-                  href={`/races/${upcomingRace.id}`}
-                  className="btn-f1 px-6 py-2.5 text-center rounded-lg flex items-center justify-center gap-1 text-sm cursor-pointer"
-                >
-                  {userPredictionForUpcoming ? "Edit Pick" : "Make Picks"}
-                  <ChevronRight className="w-4 h-4" />
-                </Link>
+                <div className="my-8" />
+
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+                  <div className="text-sm text-zinc-400 font-semibold">
+                    {userPredictionForUpcoming ? (
+                      <span className="flex items-center gap-2 text-neon-green">
+                        <span className="h-2 w-2 rounded-full bg-neon-green"></span>
+                        Prediction saved: P1 {getDriverName(userPredictionForUpcoming.predictedP1)}
+                      </span>
+                    ) : (
+                      <span className="flex items-center gap-2 text-zinc-400">
+                        <span className="h-2 w-2 rounded-full bg-zinc-650"></span>
+                        No prediction submitted.
+                      </span>
+                    )}
+                  </div>
+
+                  <Link
+                    href={`/races/${upcomingRace.id}`}
+                    className="btn-f1 px-6 py-2.5 text-center rounded-lg flex items-center justify-center gap-1 text-sm cursor-pointer"
+                  >
+                    {userPredictionForUpcoming ? "Edit Pick" : "Make Picks"}
+                    <ChevronRight className="w-4 h-4" />
+                  </Link>
+                </div>
               </div>
             </div>
           ) : (
@@ -195,7 +194,7 @@ export default async function Home() {
             </div>
           )}
 
-          {/* Last Completed Race Recap snippet */}
+          {/* Last Completed Race Recap */}
           {lastCompletedRace && (
             <div className="glass-card rounded-2xl p-8">
               <div className="flex items-center justify-between mb-4">
@@ -210,25 +209,25 @@ export default async function Home() {
                 <div className="bg-zinc-900/60 p-4 rounded-xl">
                   <div className="text-[10px] text-zinc-500 font-bold uppercase">1st Place</div>
                   <div className="text-xl font-black text-amber-500 mt-2 uppercase">
-                    {lastCompletedRace.result?.actualP1.replace("_", " ")}
+                    {lastCompletedRace.result ? getDriverName(lastCompletedRace.result.actualP1) : "—"}
                   </div>
                 </div>
                 <div className="bg-zinc-900/60 p-4 rounded-xl">
                   <div className="text-[10px] text-zinc-500 font-bold uppercase">2nd Place</div>
                   <div className="text-xl font-black text-zinc-300 mt-2 uppercase">
-                    {lastCompletedRace.result?.actualP2.replace("_", " ")}
+                    {lastCompletedRace.result ? getDriverName(lastCompletedRace.result.actualP2) : "—"}
                   </div>
                 </div>
                 <div className="bg-zinc-900/60 p-4 rounded-xl">
                   <div className="text-[10px] text-zinc-500 font-bold uppercase">3rd Place</div>
                   <div className="text-xl font-black text-amber-700 mt-2 uppercase">
-                    {lastCompletedRace.result?.actualP3.replace("_", " ")}
+                    {lastCompletedRace.result ? getDriverName(lastCompletedRace.result.actualP3) : "—"}
                   </div>
                 </div>
               </div>
 
               <div className="mt-6 flex items-center justify-between text-sm text-zinc-400 font-semibold">
-                <span>Fastest Lap: <strong className="text-white uppercase">{lastCompletedRace.result?.actualFastestLap.replace("_", " ")}</strong></span>
+                <span>Fastest Lap: <strong className="text-white uppercase">{lastCompletedRace.result ? getDriverName(lastCompletedRace.result.actualFastestLap) : "—"}</strong></span>
                 <Link href={`/races/${lastCompletedRace.id}`} className="text-f1-cyan hover:underline flex items-center gap-0.5 text-sm">
                   Full Details <ChevronRight className="w-4 h-4" />
                 </Link>
@@ -237,7 +236,7 @@ export default async function Home() {
           )}
         </div>
 
-        {/* Right 1 Column: Stats & Quick Links */}
+        {/* Right Column: Stats & Quick Links */}
         <div className="space-y-6">
           {/* User Score Stats Card */}
           {user ? (

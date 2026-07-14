@@ -125,11 +125,21 @@ export default async function RaceDetailPage({ params }: RaceDetailPageProps) {
       </Link>
 
       {/* Hero Header */}
-      <div className="glass-card rounded-2xl p-8 mb-8 relative overflow-hidden">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
+      <div className="rounded-2xl mb-8 relative overflow-hidden">
+        {/* Background photo */}
+        <div className="absolute inset-0">
+          <img
+            src={getRaceImageUrl(race.name)}
+            alt=""
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-zinc-950 via-zinc-950/85 to-zinc-950/50"></div>
+        </div>
+
+        <div className="relative p-8 flex flex-col md:flex-row md:items-center justify-between gap-8">
           <div className="flex-1 space-y-4">
             <div className="flex items-center gap-2">
-              <span className="text-xs bg-zinc-800 text-zinc-300 font-bold px-2 py-0.5 rounded">
+              <span className="text-xs bg-zinc-800/80 text-zinc-300 font-bold px-2 py-0.5 rounded">
                 Round {race.round}
               </span>
               {isLocked ? (
@@ -153,16 +163,8 @@ export default async function RaceDetailPage({ params }: RaceDetailPageProps) {
             </div>
           </div>
 
-          <div className="flex-shrink-0 bg-zinc-900/30 p-4 rounded-xl flex items-center justify-center h-28 w-44">
-            <img
-              src={getRaceImageUrl(race.name)}
-              alt="Circuit Map"
-              className="h-full w-auto object-contain filter invert opacity-90"
-            />
-          </div>
-
           {!isLocked && (
-            <div className="flex flex-col items-start md:items-end gap-1.5 bg-zinc-900/40 p-4 rounded min-w-[200px]">
+            <div className="flex flex-col items-start md:items-end gap-1.5 bg-zinc-900/60 backdrop-blur-sm p-4 rounded min-w-[200px]">
               <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider flex items-center gap-1">
                 <Clock className="w-3 h-3 text-f1-cyan" /> Submissions Close
               </span>
